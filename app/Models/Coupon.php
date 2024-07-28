@@ -3,28 +3,22 @@
 namespace App\Models;
 
 use App\Models\Annee;
-use App\Models\Cours;
 use App\Models\Etudiant;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class Recours extends Model
+class Coupon extends Model
 {
     use HasFactory;
-    protected $fillable=["motif","contenu","annee_id","etudiant_id","cours_id","created_at","updated_at"];
+    protected $fillable=["annee_id","etudiant_id"];
 
-    public function etudiant():BelongsTo
-    {
-        return $this->belongsTo(Etudiant::class);
-    }
     public function annee():BelongsTo
     {
         return $this->belongsTo(Annee::class);
     }
-
-    public function cours():BelongsTo
+    public function etudiant():BelongsTo
     {
-        return $this->belongsTo(Cours::class);
+        return $this->belongsTo(Etudiant::class);
     }
 }

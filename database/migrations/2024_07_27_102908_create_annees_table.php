@@ -11,14 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('suivres', function (Blueprint $table) {
+        Schema::create('annees', function (Blueprint $table) {
             $table->id();
-            $table->date("periodeD");
-            $table->date("periodeF");
-            $table->integer("tj");
-            $table->integer("examen");
-            $table->unsignedBigInteger("etudiant_id");
-            $table->unsignedBigInteger("cours_id");
+            $table->string("lib",10);
             $table->timestamps();
         });
     }
@@ -28,6 +23,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('suivres');
+        Schema::dropIfExists('annees');
     }
 };

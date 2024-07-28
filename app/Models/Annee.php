@@ -5,10 +5,8 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Suivre extends Model
+class Annee extends Model
 {
     use HasFactory;
-    protected $fillable=["periodeD","periodeF","tj","examen","created_at","updated_at"];
-
-    
+    protected $fillable=["lib","created_at","updated_at"];
 }

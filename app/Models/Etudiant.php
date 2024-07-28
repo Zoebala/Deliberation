@@ -19,8 +19,5 @@ class Etudiant extends Model
         return $this->belongsTo(Classe::class);
     }
 
-    public function cours():BelongsToMany
-    {
-        return $this->belongsToMany(Cours::class,'suivres')->withTimestamps();
-    }
+
 }

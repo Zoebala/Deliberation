@@ -13,6 +13,11 @@ return new class extends Migration
     {
         Schema::create('recours', function (Blueprint $table) {
             $table->id();
+            $table->string("motif");
+            $table->string("contenu");
+            $table->unsignedBigInteger("annee_id");
+            $table->unsignedBigInteger("cours_id");
+            $table->unsignedBigInteger("etudiant_id");
             $table->timestamps();
         });
     }
