@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 class Membrejury extends Model
 {
     use HasFactory;
-    protected $fillable=["nom","postnom","prenom","tel","email","fonction","created_at","updated_at"];
+    protected $fillable=["jury_id","nom","postnom","prenom","tel","email","fonction","created_at","updated_at"];
 
     public function jury():BelongsTo
     {
