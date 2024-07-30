@@ -51,20 +51,22 @@ class ClasseResource extends Resource
                     ->icon("heroicon-o-building-office-2")
                     ->description("Ajout Classes")
                     ->schema([
-                        Select::make("jury_id")
-                            ->label("Jury")
-                            ->required()
-                            ->options(Jury::where("section_id",session("section_id")[0])->pluck("lib","id"))
-                            ->preload()
-                            ->searchable(),
+                        TextInput::make("jury")
+                            ->label("Jury Sélectionné")
+                            ->disabled()
+                            ->placeholder(function(){
+                                $Section=SectionModel::where("id",session("section_id")[0] ?? 1)->first();
+                                $Jury=Jury::where("id",session("jury_id")[0] ?? 1)->first();
+                                return $Section->lib." | ".$Jury->lib;
+                            }),
                         TextInput::make("lib")
                             ->label("Classe")
                             ->required()
                             ->live()
                             ->afterStateUpdated(function(Get $get,Set $set){
 
-                                if(filled($get("jury_id")) && filled($get("lib"))){
-                                    $rep=Classe::Where("jury_id",$get("jury_id"))
+                                if(filled($get("lib"))){
+                                    $rep=Classe::Where("jury_id",session("jury_id")[0] ?? 1)
                                                 ->Where("lib",$get("lib"))
                                                 ->exists();
                                     if($rep){

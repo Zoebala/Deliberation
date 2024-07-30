@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\Annee;
+use App\Models\Classe;
 use App\Models\Section;
 use App\Models\Membrejury;
 use Illuminate\Database\Eloquent\Model;
@@ -27,5 +28,10 @@ class Jury extends Model
     public function membrejury():HasMany
     {
         return $this->hasMany(Membrejury::class);
+    }
+
+    public function classes():HasMany
+    {
+        return $this->hasMany(Classe::class);
     }
 }

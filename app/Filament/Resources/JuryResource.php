@@ -5,14 +5,17 @@ namespace App\Filament\Resources;
 use Filament\Forms;
 use App\Models\Jury;
 use Filament\Tables;
+use App\Models\Classe;
 use Filament\Forms\Get;
 use Filament\Forms\Set;
 use Filament\Forms\Form;
 use Filament\Tables\Table;
 use Filament\Resources\Resource;
 use Filament\Forms\Components\Select;
+use Filament\Forms\Components\Toggle;
 use Filament\Forms\Components\Section;
 use App\Models\Section as SectionModel;
+use Filament\Forms\Components\Repeater;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Forms\Components\TextInput;
 use Filament\Notifications\Notification;
@@ -51,6 +54,7 @@ class JuryResource extends Resource
                     ->label("Section")
                     ->options(SectionModel::all()->pluck("lib","id"))
                     ->preload()
+                    ->live()
                     ->required()
                     ->searchable(),
                     TextInput::make("lib")
@@ -73,6 +77,48 @@ class JuryResource extends Resource
                         }
                     })
                     ->placeholder("Ex: Jury A"),
+
+                    //Afficheur du Repétiteur
+                    Toggle::make("afficher")
+                          ->live()
+                          ->label(function($state){
+                                if($state==false)
+                                    return "Associer des classes";
+                                else
+                                    return "Ne pas associer des classes";
+                          }),
+
+                    //Répétiteur
+                    Repeater::make("classes")
+                    ->relationship()
+                    ->label("Classe")
+                    ->visible(fn(Get $get):bool => $get("afficher")==true)
+                    ->schema([
+                        TextInput::make("lib")
+                        ->label("Classe")
+                        ->required()
+                        ->live()
+                        // ->afterStateUpdated(function(Set $set,Get $get,$state){
+
+                        //     if(filled($get("lib"))){
+                        //         $rep=Classe::join("juries","juries.id","classes.jury_id")
+                        //                     ->where("juries.lib",$get('../../lib'))
+                        //                     ->where("classes.lib",$state)
+                        //                     ->exists();
+                        //         if($rep){
+                        //             $set("lib",null);
+                        //             Notification::make()
+                        //                 ->title("La classe saisie a déjà été ajoutée pour ce jury")
+                        //                 ->warning()
+                        //                 ->send();
+                        //         }
+                        //     }
+                        // })
+                        ->placeholder("Ex: L1 IT")
+                        ->maxlength(50),
+                    ])->columnSpanFull()
+                        ->addActionLabel('Ajouter une classe')
+                        ->grid(2),
                 ])->columns(2),
             ]);
     }

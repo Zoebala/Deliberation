@@ -19,4 +19,10 @@ class CreateClasse extends CreateRecord
     {
         return "Classe ajoutée avec succès!";
     }
+
+    protected function mutateFormDataBeforeCreate(array $data):array
+    {
+        $data["jury_id"]=(int)session("jury_id")[0];
+        return $data;
+    }
 }

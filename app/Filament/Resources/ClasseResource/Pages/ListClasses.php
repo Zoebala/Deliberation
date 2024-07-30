@@ -94,7 +94,7 @@ class ListClasses extends ListRecords
 
                     // dd(session('Annee'));
                     Notification::make()
-                    ->title("Section Choisie :  ".$data['section'])
+                    ->title("Jury Choisi :  ".$data['jury']." | ". $data["section"])
                     ->success()
                      ->duration(5000)
                     ->send();
@@ -106,11 +106,11 @@ class ListClasses extends ListRecords
 
     public $defaultAction="jury";
 
-    public function Section():Action
+    public function jury():Action
     {
 
         return Action::make("Section")
-                ->modalHeading("Choix de la Section")
+                ->modalHeading("Choix du jury")
                 ->modalSubmitActionLabel("Définir")
                 ->visible(fn():bool => session("section_id") == null)
                 ->form([
@@ -176,7 +176,7 @@ class ListClasses extends ListRecords
 
                     // dd(session('Annee'));
                     Notification::make()
-                    ->title("Section Choisie :  ".$data['section'])
+                    ->title("Jury Choisi :  ".$data['jury']." | ". $data["section"])
                     ->success()
                      ->duration(5000)
                     ->send();
