@@ -21,6 +21,7 @@ use Filament\Forms\Components\TextInput;
 use Filament\Notifications\Notification;
 use Filament\Tables\Actions\ActionGroup;
 use Illuminate\Database\Eloquent\Builder;
+use Filament\Forms\Components\Actions\Action;
 use App\Filament\Resources\JuryResource\Pages;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Resources\JuryResource\RelationManagers;
@@ -98,26 +99,13 @@ class JuryResource extends Resource
                         ->label("Classe")
                         ->required()
                         ->live()
-                        // ->afterStateUpdated(function(Set $set,Get $get,$state){
-
-                        //     if(filled($get("lib"))){
-                        //         $rep=Classe::join("juries","juries.id","classes.jury_id")
-                        //                     ->where("juries.lib",$get('../../lib'))
-                        //                     ->where("classes.lib",$state)
-                        //                     ->exists();
-                        //         if($rep){
-                        //             $set("lib",null);
-                        //             Notification::make()
-                        //                 ->title("La classe saisie a déjà été ajoutée pour ce jury")
-                        //                 ->warning()
-                        //                 ->send();
-                        //         }
-                        //     }
-                        // })
                         ->placeholder("Ex: L1 IT")
                         ->maxlength(50),
                     ])->columnSpanFull()
                         ->addActionLabel('Ajouter une classe')
+                        ->deleteAction(
+                            fn (Action $action) => $action->requiresConfirmation(),
+                        )
                         ->grid(2),
                 ])->columns(2),
             ]);
@@ -130,12 +118,12 @@ class JuryResource extends Resource
                 //
                 TextColumn::make("section.lib")
                 ->label("Section")
-                ->sortable()
-                ->searchable(),
+                ->searchable()
+                ->sortable(),
                 TextColumn::make("lib")
                 ->label("Jury")
-                ->sortable()
-                ->searchable(),
+                ->searchable()
+                ->sortable(),
             ])
             ->filters([
                 //
