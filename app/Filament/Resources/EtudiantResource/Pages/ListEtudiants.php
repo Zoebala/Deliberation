@@ -15,6 +15,8 @@ use Filament\Resources\Pages\ListRecords;
 use Illuminate\Database\Eloquent\Builder;
 use App\Filament\Resources\EtudiantResource;
 use Filament\Resources\Pages\ListRecords\Tab;
+use Konnco\FilamentImport\Actions\ImportField;
+use Konnco\FilamentImport\Actions\ImportAction;
 
 class ListEtudiants extends ListRecords
 {
@@ -73,30 +75,24 @@ class ListEtudiants extends ListRecords
                      return redirect()->route("filament.admin.resources.etudiants.index");
 
                 }),
-            Action::make("importation")
+            ImportAction::make("importation")
                     ->label("Importer Etudiants")
                     ->icon("heroicon-o-document-arrow-down")
                     ->fields([
-                        // ImportField::make('nom')
-                        //     ->required(),
-                        // ImportField::make('postnom')
-                        //     ->required()
-                        //     ->label('Postnom'),
-                        // ImportField::make('prenom')
-                        //     // ->required()
-                        //     ->label('Prenom'),
-                        // ImportField::make('teletudiant')
-                        //     // ->required()
-                        //     ->label('Téléphone Etudiant'),
-                        // ImportField::make('genre')
-                        //     ->required()
-                        //     ->label('Genre'),
-                        // ImportField::make('matricule')
-                        //     ->required()
-                        //     ->label('Matricule'),
-                        // ImportField::make('classe_id')
-                        //     ->required()
-                        //     ->label('Classe'),
+                        ImportField::make('nom')
+                            ->required(),
+                        ImportField::make('postnom')
+                            ->required()
+                            ->label('Postnom'),
+                        ImportField::make('prenom')
+                            ->required()
+                            ->label('Prenom'),
+                        ImportField::make('genre')
+                            ->required()
+                            ->label('Genre'),
+                        ImportField::make('classe_id')
+                            ->required()
+                            ->label('Classe'),
 
                     ])
         ];
