@@ -141,57 +141,6 @@ class MembrejuryResource extends Resource
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
                 ]),
-            ])
-            ->HeaderActions([
-                Action::make("Choisir une Section")
-                ->icon("heroicon-o-building-office-2")
-                ->modalHeading("Choix de la Section")
-                ->modalSubmitActionLabel("Définir")
-                ->form([
-                    Select::make("section_id")
-                    ->label("Section")
-                    ->searchable()
-                    ->required()
-                    ->live()
-                    ->afterStateUpdated(function($state,Set $set){
-                        $Section=Section::whereId($state)->get(["lib"]);
-                        $set("section",$Section[0]->lib);
-
-                    })
-                ->options(Section::query()->pluck("lib","id")),
-                    Hidden::make("section")
-                    ->label("Année Choisie")
-                    ->disabled()
-                    // ->hidden()
-                    ->dehydrated(true)
-
-
-                ])
-                ->modalWidth(MaxWidth::Medium)
-                ->modalIcon("heroicon-o-building-office-2")
-                ->action(function(array $data){
-                    if(session('section_id')==NULL && session('section')==NULL){
-
-                        session()->push("section_id", $data["section_id"]);
-                        session()->push("section", $data["section"]);
-
-                    }else{
-                        session()->pull("section_id");
-                        session()->pull("section");
-                        session()->push("section_id", $data["section_id"]);
-                        session()->push("section", $data["section"]);
-
-                    }
-
-                    // dd(session('Annee'));
-                    Notification::make()
-                    ->title("Section Choisie :  ".$data['section'])
-                    ->success()
-                     ->duration(5000)
-                    ->send();
-                     return redirect()->route("filament.admin.resources.membrejuries.index");
-
-                }),
             ]);
     }
 

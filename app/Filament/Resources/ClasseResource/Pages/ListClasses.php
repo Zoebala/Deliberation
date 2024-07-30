@@ -1,12 +1,13 @@
 <?php
 
-namespace App\Filament\Resources\MembrejuryResource\Pages;
+namespace App\Filament\Resources\ClasseResource\Pages;
 
 use App\Models\Jury;
 use Filament\Actions;
+use App\Models\Classe;
 use App\Models\Section;
+use Filament\Forms\Get;
 use Filament\Forms\Set;
-use App\Models\Membrejury;
 use Filament\Actions\Action;
 use Filament\Support\Enums\MaxWidth;
 use Filament\Forms\Components\Hidden;
@@ -14,22 +15,22 @@ use Filament\Forms\Components\Select;
 use Filament\Notifications\Notification;
 use Filament\Resources\Pages\ListRecords;
 use Illuminate\Database\Eloquent\Builder;
+use App\Filament\Resources\ClasseResource;
 use Filament\Resources\Pages\ListRecords\Tab;
-use App\Filament\Resources\MembrejuryResource;
 
-class ListMembrejuries extends ListRecords
+class ListClasses extends ListRecords
 {
-    protected static string $resource = MembrejuryResource::class;
+    protected static string $resource = ClasseResource::class;
 
     protected function getHeaderActions(): array
     {
         return [
             Actions\CreateAction::make()
-            ->label("Ajouter Membre Jury")
-            ->icon("heroicon-o-user-plus"),
-            Action::make("Choix Section")
-                ->icon("heroicon-o-building-office-2")
-                ->modalHeading("Choix de la Section")
+            ->label("Ajouter une Classe")
+            ->icon("heroicon-o-plus-circle"),
+             Action::make("Choix Jury")
+                ->modalHeading("Choix du jury")
+                ->icon("heroicon-o-building-library")
                 ->modalSubmitActionLabel("Définir")
                 ->form([
                     Select::make("section_id")
@@ -37,17 +38,35 @@ class ListMembrejuries extends ListRecords
                     ->searchable()
                     ->required()
                     ->live()
+                    ->options(Section::query()->pluck("lib","id"))
                     ->afterStateUpdated(function($state,Set $set){
                         $Section=Section::whereId($state)->get(["lib"]);
                         $set("section",$Section[0]->lib);
 
-                    })
-                ->options(Section::query()->pluck("lib","id")),
+                    }),
                     Hidden::make("section")
                     ->label("Année Choisie")
                     ->disabled()
                     // ->hidden()
-                    ->dehydrated(true)
+                    ->dehydrated(true),
+                    Select::make("jury_id")
+                    ->label("Jury")
+                    ->options(function(Get $get){
+                        return Jury::where("section_id",$get("section_id"))->pluck("lib","id");
+                    })
+                    ->searchable()
+                    ->required()
+                    ->live()
+                    ->afterStateUpdated(function($state,Set $set){
+                        $Jury=Jury::where("id",$state)->get(["lib"]);
+                        $set("jury",$Jury[0]->lib);
+
+                    }),
+                    Hidden::make("jury")
+                    ->label("Année Choisie")
+                    ->disabled()
+                    // ->hidden()
+                    ->dehydrated(true),
 
 
                 ])
@@ -58,12 +77,18 @@ class ListMembrejuries extends ListRecords
 
                         session()->push("section_id", $data["section_id"]);
                         session()->push("section", $data["section"]);
+                        session()->push("jury_id", $data["jury_id"]);
+                        session()->push("jury", $data["jury"]);
 
                     }else{
                         session()->pull("section_id");
                         session()->pull("section");
+                        session()->pull("jury_id", $data["jury_id"]);
+                        session()->pull("jury", $data["jury"]);
                         session()->push("section_id", $data["section_id"]);
                         session()->push("section", $data["section"]);
+                        session()->push("jury_id", $data["jury_id"]);
+                        session()->push("jury", $data["jury"]);
 
                     }
 
@@ -73,13 +98,13 @@ class ListMembrejuries extends ListRecords
                     ->success()
                      ->duration(5000)
                     ->send();
-                     return redirect()->route("filament.admin.resources.membrejuries.index");
+                     return redirect()->route("filament.admin.resources.classes.index");
 
-                })
+                }),
         ];
     }
 
-    public $defaultAction="Section";
+    public $defaultAction="jury";
 
     public function Section():Action
     {
@@ -94,17 +119,36 @@ class ListMembrejuries extends ListRecords
                     ->searchable()
                     ->required()
                     ->live()
+                    ->options(Section::query()->pluck("lib","id"))
                     ->afterStateUpdated(function($state,Set $set){
                         $Section=Section::whereId($state)->get(["lib"]);
                         $set("section",$Section[0]->lib);
 
-                    })
-                ->options(Section::query()->pluck("lib","id")),
+                    }),
                     Hidden::make("section")
                     ->label("Année Choisie")
                     ->disabled()
                     // ->hidden()
-                    ->dehydrated(true)
+                    ->dehydrated(true),
+                    Select::make("jury_id")
+                    ->label("Jury")
+                    ->options(function(Get $get){
+
+                        return Jury::where("section_id",$get("section_id"))->pluck("lib","id");
+                    })
+                    ->searchable()
+                    ->required()
+                    ->live()
+                    ->afterStateUpdated(function($state,Set $set){
+                        $Jury=Jury::whereId($state)->get(["lib"]);
+                        $set("jury",$Jury[0]->lib);
+
+                    }),
+                    Hidden::make("jury")
+                    ->label("Année Choisie")
+                    ->disabled()
+                    // ->hidden()
+                    ->dehydrated(true),
 
 
                 ])
@@ -115,12 +159,18 @@ class ListMembrejuries extends ListRecords
 
                         session()->push("section_id", $data["section_id"]);
                         session()->push("section", $data["section"]);
+                        session()->push("jury_id", $data["jury_id"]);
+                        session()->push("jury", $data["jury"]);
 
                     }else{
                         session()->pull("section_id");
                         session()->pull("section");
+                        session()->pull("jury_id", $data["jury_id"]);
+                        session()->pull("jury", $data["jury"]);
                         session()->push("section_id", $data["section_id"]);
                         session()->push("section", $data["section"]);
+                        session()->push("jury_id", $data["jury_id"]);
+                        session()->push("jury", $data["jury"]);
 
                     }
 
@@ -130,7 +180,7 @@ class ListMembrejuries extends ListRecords
                     ->success()
                      ->duration(5000)
                     ->send();
-                     return redirect()->route("filament.admin.resources.membrejuries.index");
+                     return redirect()->route("filament.admin.resources.classes.index");
 
                 });
 
@@ -140,22 +190,22 @@ class ListMembrejuries extends ListRecords
     public function getTabs():array
     {
 
-        $Section=Jury::join("sections","sections.id","juries.section_id")
-                ->where("section_id",session("section_id")[0] ?? 1)->first(["sections.lib as section"]);
+        $Section=Section::where("id",session("section_id")[0] ?? 1)->first();
 
+        $Jury=Jury::whereId(session("jury_id")[0] ?? 1)->first();
 
             return [
-                "Section $Section->section"=>Tab::make()
+                "$Section->lib | $Jury->lib"=>Tab::make()
                 ->modifyQueryUsing(function(Builder $query)
                 {
-                $query->join("juries","juries.id","membrejuries.jury_id")->where("section_id",session("section_id")[0] ?? 1);
+                $query->where("classes.jury_id",session("jury_id")[0] ?? 1);
 
-                })->badge(Membrejury::query()
-                ->join("juries","juries.id","membrejuries.jury_id")
-                ->where("section_id",session("section_id")[0] ?? 1)->count())
+                })->badge(Classe::join("juries","juries.id","classes.jury_id")
+                                ->where("juries.id",session("jury_id")[0] ?? 1)
+                                 ->count())
                 ->icon("heroicon-o-calendar-days"),
-                'Tous'=>Tab::make()
-                ->badge(Membrejury::query()->count()),
+                'Toutes'=>Tab::make()
+                ->badge(Classe::query()->count()),
 
             ];
 
