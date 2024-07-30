@@ -180,13 +180,18 @@ class ListCours extends ListRecords
                 " $Classe->lib | $Semestre->lib"=>Tab::make()
                 ->modifyQueryUsing(function(Builder $query)
                 {
-                $query->where("cours.classe_id",session("classe_id")[0] ?? 1);
+                $query->where("cours.classe_id",session("classe_id")[0] ?? 1)->where("semestre_id",session("semestre_id")[0] ?? 1);
 
                 })->badge(Cours::join("classes","classes.id","cours.classe_id")
                                 ->where("classes.id",session("classe_id")[0] ?? 1)
                                  ->count())
                 ->icon("heroicon-o-building-office-2"),
-                'Tous'=>Tab::make()
+                'Tous les semestres'=>Tab::make()
+                ->modifyQueryUsing(function(Builder $query)
+                {
+                $query->where("cours.classe_id",session("classe_id")[0] ?? 1);
+
+                })
                 ->badge(Cours::query()->count()),
 
             ];
