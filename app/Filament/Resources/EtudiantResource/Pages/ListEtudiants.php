@@ -1,123 +1,36 @@
 <?php
 
-namespace App\Filament\Resources\CoursResource\Pages;
+namespace App\Filament\Resources\EtudiantResource\Pages;
 
-use App\Models\Cours;
 use Filament\Actions;
 use App\Models\Classe;
 use Filament\Forms\Set;
-use App\Models\Semestre;
+use App\Models\Etudiant;
 use Filament\Actions\Action;
 use Filament\Support\Enums\MaxWidth;
 use Filament\Forms\Components\Hidden;
 use Filament\Forms\Components\Select;
 use Filament\Notifications\Notification;
-use App\Filament\Resources\CoursResource;
 use Filament\Resources\Pages\ListRecords;
 use Illuminate\Database\Eloquent\Builder;
+use App\Filament\Resources\EtudiantResource;
 use Filament\Resources\Pages\ListRecords\Tab;
 
-class ListCours extends ListRecords
+class ListEtudiants extends ListRecords
 {
-    protected static string $resource = CoursResource::class;
+    protected static string $resource = EtudiantResource::class;
 
     protected function getHeaderActions(): array
     {
         return [
             Actions\CreateAction::make()
-                    ->label("Ajouter un cours")
-                    ->icon("heroicon-o-book-open"),
-                Action::make("Section")
+            ->label("Ajouter Etudiant")
+            ->icon("heroicon-o-user-plus"),
+             Action::make("classe_choix")
                 ->icon("heroicon-o-building-office")
-                ->label("Choix Classe")
+                ->label("Choix de la Classe")
                 ->modalSubmitActionLabel("Définir")
                 ->form([
-                    Select::make("semestre_id")
-                    ->label("Semestre")
-                    ->searchable()
-                    ->required()
-                    ->live()
-                    ->options(Semestre::query()->pluck("lib","id"))
-                    ->afterStateUpdated(function($state,Set $set){
-                        $Semestre=Semestre::whereId($state)->get(["lib"]);
-                        $set("semestre",$Semestre[0]->lib);
-
-                    }),
-                    Hidden::make("semestre")
-                    ->disabled()
-                    ->dehydrated(true),
-                    Select::make("classe_id")
-                    ->label("Classe")
-                    ->options(Classe::all()->pluck("lib","id"))
-                    ->searchable()
-                    ->required()
-                    ->live()
-                    ->afterStateUpdated(function($state,Set $set){
-                        $Classe=Classe::whereId($state)->get(["lib"]);
-                        $set("classe",$Classe[0]->lib);
-
-                    }),
-                    Hidden::make("classe")
-                    ->disabled()
-                    ->dehydrated(true),
-                ])
-                ->modalWidth(MaxWidth::Medium)
-                ->modalIcon("heroicon-o-building-office-2")
-                ->action(function(array $data){
-                    if(session('section_id')==NULL && session('section')==NULL){
-
-                        session()->push("semestre_id", $data["semestre_id"]);
-                        session()->push("semestre", $data["semestre"]);
-                        session()->push("classe_id", $data["classe_id"]);
-                        session()->push("classe", $data["classe"]);
-
-                    }else{
-                        session()->pull("semestre_id");
-                        session()->pull("semestre");
-                        session()->pull("classe_id", $data["classe_id"]);
-                        session()->pull("classe", $data["classe"]);
-                        session()->push("semestre_id", $data["semestre_id"]);
-                        session()->push("semestre", $data["semestre"]);
-                        session()->push("classe_id", $data["classe_id"]);
-                        session()->push("classe", $data["classe"]);
-
-
-                    }
-                    Notification::make()
-                    ->title("Classe Choisie :  ".$data['classe']." | ". $data["semestre"])
-                    ->success()
-                     ->duration(5000)
-                    ->send();
-                     return redirect()->route("filament.admin.resources.cours.index");
-
-                }),
-        ];
-    }
-
-    public $defaultAction="classe";
-
-    public function classe():Action
-    {
-
-        return Action::make("Section")
-                ->modalHeading("Choix de la Classe")
-                ->modalSubmitActionLabel("Définir")
-                ->visible(fn():bool => session("semestre_id") == null)
-                ->form([
-                    Select::make("semestre_id")
-                    ->label("Semestre")
-                    ->searchable()
-                    ->required()
-                    ->live()
-                    ->options(Semestre::query()->pluck("lib","id"))
-                    ->afterStateUpdated(function($state,Set $set){
-                        $Semestre=Semestre::whereId($state)->get(["lib"]);
-                        $set("semestre",$Semestre[0]->lib);
-
-                    }),
-                    Hidden::make("semestre")
-                    ->disabled()
-                    ->dehydrated(true),
                     Select::make("classe_id")
                     ->label("Classe")
                     ->options(Classe::all()->pluck("lib","id"))
@@ -140,59 +53,125 @@ class ListCours extends ListRecords
                 ->action(function(array $data){
                     if(session('classe_id')==NULL && session('classe')==NULL){
 
-                        session()->push("semestre_id", $data["semestre_id"]);
-                        session()->push("semestre", $data["semestre"]);
                         session()->push("classe_id", $data["classe_id"]);
                         session()->push("classe", $data["classe"]);
 
                     }else{
-                        session()->pull("semestre_id");
-                        session()->pull("semestre");
+
                         session()->pull("classe_id", $data["classe_id"]);
                         session()->pull("classe", $data["classe"]);
-                        session()->push("semestre_id", $data["semestre_id"]);
-                        session()->push("semestre", $data["semestre"]);
                         session()->push("classe_id", $data["classe_id"]);
                         session()->push("classe", $data["classe"]);
 
 
                     }
                     Notification::make()
-                    ->title("Classe Choisie :  ".$data['classe']." | ". $data["semestre"])
+                    ->title("Classe Choisie :  ".$data['classe'])
                     ->success()
                      ->duration(5000)
                     ->send();
-                     return redirect()->route("filament.admin.resources.cours.index");
+                     return redirect()->route("filament.admin.resources.etudiants.index");
+
+                }),
+            Action::make("importation")
+                    ->label("Importer Etudiants")
+                    ->icon("heroicon-o-document-arrow-down")
+                    ->fields([
+                        // ImportField::make('nom')
+                        //     ->required(),
+                        // ImportField::make('postnom')
+                        //     ->required()
+                        //     ->label('Postnom'),
+                        // ImportField::make('prenom')
+                        //     // ->required()
+                        //     ->label('Prenom'),
+                        // ImportField::make('teletudiant')
+                        //     // ->required()
+                        //     ->label('Téléphone Etudiant'),
+                        // ImportField::make('genre')
+                        //     ->required()
+                        //     ->label('Genre'),
+                        // ImportField::make('matricule')
+                        //     ->required()
+                        //     ->label('Matricule'),
+                        // ImportField::make('classe_id')
+                        //     ->required()
+                        //     ->label('Classe'),
+
+                    ])
+        ];
+    }
+
+    public $defaultAction="classe";
+    public function classe():Action
+    {
+
+        return Action::make("classe")
+                ->modalHeading("Choix de la Classe")
+                ->modalSubmitActionLabel("Définir")
+                ->visible(fn():bool => session("classe_id") == null)
+                ->form([
+                    Select::make("classe_id")
+                    ->label("Classe")
+                    ->options(Classe::all()->pluck("lib","id"))
+                    ->searchable()
+                    ->required()
+                    ->live()
+                    ->afterStateUpdated(function($state,Set $set){
+                        $Classe=Classe::whereId($state)->get(["lib"]);
+                        $set("classe",$Classe[0]->lib);
+
+                    }),
+                    Hidden::make("classe")
+                    ->disabled()
+                    ->dehydrated(true),
+
+
+                ])
+                ->modalWidth(MaxWidth::Medium)
+                ->modalIcon("heroicon-o-building-office-2")
+                ->action(function(array $data){
+                    if(session('classe_id')==NULL && session('classe')==NULL){
+
+                        session()->push("classe_id", $data["classe_id"]);
+                        session()->push("classe", $data["classe"]);
+
+                    }else{
+
+                        session()->pull("classe_id", $data["classe_id"]);
+                        session()->pull("classe", $data["classe"]);
+                        session()->push("classe_id", $data["classe_id"]);
+                        session()->push("classe", $data["classe"]);
+
+
+                    }
+                    Notification::make()
+                    ->title("Classe Choisie :  ".$data['classe'])
+                    ->success()
+                     ->duration(5000)
+                    ->send();
+                     return redirect()->route("filament.admin.resources.etudiants.index");
 
                 });
 
     }
 
-
     public function getTabs():array
     {
 
-        $Semestre=Semestre::where("id",session("semestre_id")[0] ?? 1)->first();
-
-        $Classe=Classe::whereId(session("classe_id")[0] ?? 1)->first();
+        $Classe=Classe::where("id",session("classe_id")[0] ?? 1)->first();
 
             return [
-                " $Classe->lib | $Semestre->lib"=>Tab::make()
+                "$Classe->lib"=>Tab::make()
                 ->modifyQueryUsing(function(Builder $query)
                 {
-                $query->where("cours.classe_id",session("classe_id")[0] ?? 1)->where("semestre_id",session("semestre_id")[0] ?? 1);
+                $query->where("classe_id",session("classe_id")[0] ?? 1);
 
-                })->badge(Cours::join("classes","classes.id","cours.classe_id")
-                                ->where("classes.id",session("classe_id")[0] ?? 1)
+                })->badge(Etudiant::where("classe_id",session("classe_id")[0] ?? 1)
                                  ->count())
-                ->icon("heroicon-o-building-office-2"),
-                'Tous les semestres'=>Tab::make()
-                ->modifyQueryUsing(function(Builder $query)
-                {
-                $query->where("cours.classe_id",session("classe_id")[0] ?? 1);
-
-                })
-                ->badge(Cours::query()->count()),
+                ->icon("heroicon-o-calendar-days"),
+                'Tous'=>Tab::make()
+                ->badge(Etudiant::query()->count()),
 
             ];
 

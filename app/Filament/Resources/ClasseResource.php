@@ -91,6 +91,10 @@ class ClasseResource extends Resource
         return $table
             ->columns([
                 //
+                TextColumn::make("id")
+                    ->label("Identifiant")
+                    ->numeric()
+                    ->sortable(),
                 TextColumn::make("lib")
                     ->label("Classe")
                     ->sortable()
