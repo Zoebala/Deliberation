@@ -112,9 +112,13 @@ class MembrejuryResource extends Resource
                     ->sortable()
                     ->searchable(),
                 Tables\Columns\TextColumn::make('tel')
-                    ->searchable(),
+                    ->sortable()
+                    ->searchable()
+                    ->placeholder("Pas de phone"),
                 Tables\Columns\TextColumn::make('email')
-                    ->searchable(),
+                    ->sortable()
+                    ->searchable()
+                    ->placeholder("Pas d'adresse mail"),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()

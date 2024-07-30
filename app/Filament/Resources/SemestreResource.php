@@ -26,7 +26,7 @@ class SemestreResource extends Resource
     protected static ?int $navigationSort = 30;
     public static function getNavigationBadge():string
     {
-        return static::getModel()::count();
+        return static::getModel()::Where("annee_id",session("Annee_id")[0] ?? 1)->count();
     }
     public static function getNavigationBadgeColor():string
     {

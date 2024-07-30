@@ -71,6 +71,8 @@ class ListJuries extends ListRecords
                     }else{
                         session()->pull("Annee_id");
                         session()->pull("Annee");
+                        session()->push("Annee_id", $data["annee"]);
+                        session()->push("Annee", $data["lib_annee"]);
 
                     }
 

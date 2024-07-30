@@ -114,20 +114,19 @@ class AnneeResource extends Resource
                     ->disabled()
                     // ->hidden()
                     ->dehydrated(true)
-
-
                 ])
                 ->modalWidth(MaxWidth::Medium)
                 ->modalIcon("heroicon-o-calendar")
                 ->action(function(array $data){
                     if(session('Annee_id')==NULL && session('Annee')==NULL){
-
                         session()->push("Annee_id", $data["annee"]);
                         session()->push("Annee", $data["lib_annee"]);
 
                     }else{
                         session()->pull("Annee_id");
                         session()->pull("Annee");
+                        session()->push("Annee_id", $data["annee"]);
+                        session()->push("Annee", $data["lib_annee"]);
                     }
 
                     // dd(session('Annee'));
