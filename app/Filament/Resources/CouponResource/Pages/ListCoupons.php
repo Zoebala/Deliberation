@@ -1,39 +1,40 @@
 <?php
 
-namespace App\Filament\Resources\EtudiantResource\Pages;
+namespace App\Filament\Resources\CouponResource\Pages;
 
 use App\Models\Jury;
+use App\Models\Annee;
 use Filament\Actions;
 use App\Models\Classe;
+use App\Models\Coupon;
 use App\Models\Section;
 use Filament\Forms\Get;
 use Filament\Forms\Set;
 use App\Models\Etudiant;
 use Filament\Actions\Action;
+use Illuminate\Support\HtmlString;
 use Filament\Support\Enums\MaxWidth;
 use Filament\Forms\Components\Hidden;
 use Filament\Forms\Components\Select;
 use Filament\Notifications\Notification;
 use Filament\Resources\Pages\ListRecords;
 use Illuminate\Database\Eloquent\Builder;
-use App\Filament\Resources\EtudiantResource;
+use App\Filament\Resources\CouponResource;
 use Filament\Resources\Pages\ListRecords\Tab;
-use Konnco\FilamentImport\Actions\ImportField;
-use Konnco\FilamentImport\Actions\ImportAction;
 
-class ListEtudiants extends ListRecords
+class ListCoupons extends ListRecords
 {
-    protected static string $resource = EtudiantResource::class;
+    protected static string $resource = CouponResource::class;
 
     protected function getHeaderActions(): array
     {
         return [
             Actions\CreateAction::make()
-            ->label("Ajouter Etudiant")
-            ->icon("heroicon-o-user-plus"),
-             Action::make("classe_choix")
-                ->icon("heroicon-o-building-office")
-                ->label("Choix de la Classe")
+                    ->label("Enregistrer un coupon")
+                    ->icon("heroicon-o-clipboard-document-list"),
+                Action::make("classe_choix")
+                 ->icon("heroicon-o-building-office")
+                ->label("Choix Classe")
                 ->modalSubmitActionLabel("Définir")
                 ->form([
                     Select::make("section_id")
@@ -53,8 +54,8 @@ class ListEtudiants extends ListRecords
                     Select::make("classe_id")
                     ->label("Classe")
                     ->options(function(Get $get){
-                        return Classe::where("jury_id",$get("jury_id"))->pluck("lib","id");
-                     })
+                       return Classe::where("jury_id",$get("jury_id"))->pluck("lib","id");
+                    })
                     ->searchable()
                     ->required()
                     ->live()
@@ -91,31 +92,22 @@ class ListEtudiants extends ListRecords
                     ->success()
                      ->duration(5000)
                     ->send();
-                     return redirect()->route("filament.admin.resources.etudiants.index");
+                     return redirect()->route("filament.admin.resources.coupons.index");
 
                 }),
-            ImportAction::make("importation")
-                    ->label("Importer Etudiants")
-                    ->icon("heroicon-o-document-arrow-down")
-                    ->fields([
-                        ImportField::make('nom')
-                            ->required(),
-                        ImportField::make('postnom')
-                            ->required()
-                            ->label('Postnom'),
-                        ImportField::make('prenom')
-                            ->required()
-                            ->label('Prenom'),
-                        ImportField::make('genre')
-                            ->required()
-                            ->label('Genre'),
-                        ImportField::make('classe_id')
-                            ->required()
-                            ->label('Classe'),
+                Action::make("etudiant")
+                    ->label("Relevés Etudiants non enregistrés")
+                    ->modalSubmitActionLabel("D'accord!")
+                    ->action(null)
+                    ->color("warning")
+                    ->modalCancelAction(false)
+                    ->modalHeading("Relevés Etudiants non enregistrés")
+                    ->modalDescription(new HtmlString("<strong>D'accord</strong>"))
 
-                    ])
+
         ];
     }
+
 
     public $defaultAction="classe";
     public function classe():Action
@@ -181,7 +173,7 @@ class ListEtudiants extends ListRecords
                     ->success()
                      ->duration(5000)
                     ->send();
-                     return redirect()->route("filament.admin.resources.etudiants.index");
+                     return redirect()->route("filament.admin.resources.coupons.index");
 
                 });
 
@@ -192,17 +184,27 @@ class ListEtudiants extends ListRecords
 
         $Classe=Classe::where("id",session("classe_id")[0] ?? 1)->first();
 
+        //Recherche de l'id Année
+        $Cl=Classe::join("juries","juries.id","classes.jury_id")
+                   ->where("classes.id",session("classe_id")[0] ?? 1)
+                   ->first();
+        //Récupération de l'effectif pour une classe choisie
+        $Effectif=Etudiant::where("classe_id",session("classe_id")[0] ?? 1)->count();
+        //Récupération de l'année de l'enregistrement du coupon
+        $Annee=Annee::where("id",$Cl->annee_id)->first();
+
+
             return [
-                "$Classe->lib | Code : $Classe->id"=>Tab::make()
+                "$Classe->lib | Code : $Classe->id | $Annee->lib | Effectif : $Effectif"=>Tab::make()
                 ->modifyQueryUsing(function(Builder $query)
                 {
                 $query->where("classe_id",session("classe_id")[0] ?? 1);
 
-                })->badge(Etudiant::where("classe_id",session("classe_id")[0] ?? 1)
+                })->badge("Total coupon : ".Coupon::where("classe_id",session("classe_id")[0] ?? 1)
                                  ->count())
                 ->icon("heroicon-o-calendar-days"),
                 'Tous'=>Tab::make()
-                ->badge(Etudiant::query()->count()),
+                ->badge(Coupon::query()->count()),
 
             ];
 

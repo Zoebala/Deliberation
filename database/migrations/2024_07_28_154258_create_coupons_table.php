@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger("annee_id");
             $table->unsignedBigInteger("etudiant_id");
+            $table->unsignedBigInteger("classe_id");
             $table->timestamps();
         });
     }

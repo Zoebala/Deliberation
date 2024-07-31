@@ -103,9 +103,7 @@ class JuryResource extends Resource
                         ->maxlength(50),
                     ])->columnSpanFull()
                         ->addActionLabel('Ajouter une classe')
-                        ->deleteAction(
-                            fn (Action $action) => $action->requiresConfirmation(),
-                        )
+                        ->deleteAction(fn (Action $action) => $action->requiresConfirmation(),)
                         ->grid(2),
                 ])->columns(2),
             ]);
