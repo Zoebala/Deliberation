@@ -40,14 +40,15 @@ class ListClasses extends ListRecords
                     ->live()
                     ->options(Section::query()->pluck("lib","id"))
                     ->afterStateUpdated(function($state,Set $set){
-                        $Section=Section::whereId($state)->get(["lib"]);
-                        $set("section",$Section[0]->lib);
+                        if($state){
+                            $Section=Section::whereId($state)->get(["lib"]);
+                            $set("section",$Section[0]->lib);
+                        }
 
                     }),
                     Hidden::make("section")
                     ->label("Année Choisie")
                     ->disabled()
-                    // ->hidden()
                     ->dehydrated(true),
                     Select::make("jury_id")
                     ->label("Jury")
@@ -58,8 +59,10 @@ class ListClasses extends ListRecords
                     ->required()
                     ->live()
                     ->afterStateUpdated(function($state,Set $set){
-                        $Jury=Jury::where("id",$state)->get(["lib"]);
-                        $set("jury",$Jury[0]->lib);
+                        if($state){
+                            $Jury=Jury::where("id",$state)->get(["lib"]);
+                            $set("jury",$Jury[0]->lib);
+                        }
 
                     }),
                     Hidden::make("jury")
@@ -121,8 +124,10 @@ class ListClasses extends ListRecords
                     ->live()
                     ->options(Section::query()->pluck("lib","id"))
                     ->afterStateUpdated(function($state,Set $set){
-                        $Section=Section::whereId($state)->get(["lib"]);
-                        $set("section",$Section[0]->lib);
+                        if($state){
+                            $Section=Section::whereId($state)->get(["lib"]);
+                            $set("section",$Section[0]->lib);
+                        }
 
                     }),
                     Hidden::make("section")
@@ -140,14 +145,15 @@ class ListClasses extends ListRecords
                     ->required()
                     ->live()
                     ->afterStateUpdated(function($state,Set $set){
-                        $Jury=Jury::whereId($state)->get(["lib"]);
-                        $set("jury",$Jury[0]->lib);
+                        if($state){
+                            $Jury=Jury::whereId($state)->get(["lib"]);
+                            $set("jury",$Jury[0]->lib);
+                        }
 
                     }),
                     Hidden::make("jury")
                     ->label("Année Choisie")
                     ->disabled()
-                    // ->hidden()
                     ->dehydrated(true),
 
 

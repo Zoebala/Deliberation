@@ -39,8 +39,10 @@ class ListCours extends ListRecords
                     ->live()
                     ->options(Semestre::query()->pluck("lib","id"))
                     ->afterStateUpdated(function($state,Set $set){
-                        $Semestre=Semestre::whereId($state)->get(["lib"]);
-                        $set("semestre",$Semestre[0]->lib);
+                        if($state){
+                            $Semestre=Semestre::whereId($state)->get(["lib"]);
+                            $set("semestre",$Semestre[0]->lib);
+                        }
 
                     }),
                     Hidden::make("semestre")
@@ -53,8 +55,10 @@ class ListCours extends ListRecords
                     ->required()
                     ->live()
                     ->afterStateUpdated(function($state,Set $set){
-                        $Classe=Classe::whereId($state)->get(["lib"]);
-                        $set("classe",$Classe[0]->lib);
+                        if($state){
+                            $Classe=Classe::whereId($state)->get(["lib"]);
+                            $set("classe",$Classe[0]->lib);
+                        }
 
                     }),
                     Hidden::make("classe")
@@ -111,8 +115,10 @@ class ListCours extends ListRecords
                     ->live()
                     ->options(Semestre::query()->pluck("lib","id"))
                     ->afterStateUpdated(function($state,Set $set){
-                        $Semestre=Semestre::whereId($state)->get(["lib"]);
-                        $set("semestre",$Semestre[0]->lib);
+                        if($state){
+                            $Semestre=Semestre::whereId($state)->get(["lib"]);
+                            $set("semestre",$Semestre[0]->lib);
+                        }
 
                     }),
                     Hidden::make("semestre")
@@ -125,8 +131,10 @@ class ListCours extends ListRecords
                     ->required()
                     ->live()
                     ->afterStateUpdated(function($state,Set $set){
-                        $Classe=Classe::whereId($state)->get(["lib"]);
-                        $set("classe",$Classe[0]->lib);
+                        if($state){
+                            $Classe=Classe::whereId($state)->get(["lib"]);
+                            $set("classe",$Classe[0]->lib);
+                        }
 
                     }),
                     Hidden::make("classe")

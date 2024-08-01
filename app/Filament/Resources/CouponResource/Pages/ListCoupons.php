@@ -60,8 +60,10 @@ class ListCoupons extends ListRecords
                     ->required()
                     ->live()
                     ->afterStateUpdated(function($state,Set $set){
-                        $Classe=Classe::whereId($state)->get(["lib"]);
-                        $set("classe",$Classe[0]->lib);
+                        if($state){
+                            $Classe=Classe::whereId($state)->get(["lib"]);
+                            $set("classe",$Classe[0]->lib);
+                        }
 
                     }),
                     Hidden::make("classe")
@@ -141,8 +143,10 @@ class ListCoupons extends ListRecords
                     ->required()
                     ->live()
                     ->afterStateUpdated(function($state,Set $set){
-                        $Classe=Classe::whereId($state)->get(["lib"]);
-                        $set("classe",$Classe[0]->lib);
+                        if($state){
+                            $Classe=Classe::whereId($state)->get(["lib"]);
+                            $set("classe",$Classe[0]->lib);
+                        }
 
                     }),
                     Hidden::make("classe")

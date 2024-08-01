@@ -38,8 +38,10 @@ class ListMembrejuries extends ListRecords
                     ->required()
                     ->live()
                     ->afterStateUpdated(function($state,Set $set){
-                        $Section=Section::whereId($state)->get(["lib"]);
-                        $set("section",$Section[0]->lib);
+                        if($state){
+                            $Section=Section::whereId($state)->get(["lib"]);
+                            $set("section",$Section[0]->lib);
+                        }
 
                     })
                 ->options(Section::query()->pluck("lib","id")),
@@ -95,15 +97,16 @@ class ListMembrejuries extends ListRecords
                     ->required()
                     ->live()
                     ->afterStateUpdated(function($state,Set $set){
-                        $Section=Section::whereId($state)->get(["lib"]);
-                        $set("section",$Section[0]->lib);
+                        if($state){
+                            $Section=Section::whereId($state)->get(["lib"]);
+                            $set("section",$Section[0]->lib);
+                        }
 
                     })
-                ->options(Section::query()->pluck("lib","id")),
+                    ->options(Section::query()->pluck("lib","id")),
                     Hidden::make("section")
                     ->label("Année Choisie")
                     ->disabled()
-                    // ->hidden()
                     ->dehydrated(true)
 
 
