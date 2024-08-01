@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\RecoursResource\Pages;
 
 use App\Models\Jury;
+use App\Models\Cours;
 use Filament\Actions;
 use App\Models\Classe;
 use App\Models\Recours;
@@ -41,8 +42,10 @@ class ListRecours extends ListRecords
                     ->live()
                     ->options(Section::query()->pluck("lib","id"))
                     ->afterStateUpdated(function($state,Set $set){
-                        $Section=Section::whereId($state)->get(["lib"]);
-                        $set("section",$Section[0]->lib);
+                        if($state){
+                            $Section=Section::whereId($state)->get(["lib"]);
+                            $set("section",$Section[0]->lib);
+                        }
 
                     }),
                     Hidden::make("section")
@@ -58,8 +61,10 @@ class ListRecours extends ListRecords
                     ->required()
                     ->live()
                     ->afterStateUpdated(function($state,Set $set){
-                        $Jury=Jury::whereId($state)->get(["lib"]);
-                        $set("jury",$Jury[0]->lib);
+                        if($state){
+                            $Jury=Jury::whereId($state)->get(["lib"]);
+                            $set("jury",$Jury[0]->lib);
+                        }
                     }),
                     Hidden::make("jury")
                     ->disabled()
@@ -136,8 +141,10 @@ class ListRecours extends ListRecords
                     ->live()
                     ->options(Section::query()->pluck("lib","id"))
                     ->afterStateUpdated(function($state,Set $set){
-                        $Section=Section::whereId($state)->get(["lib"]);
-                        $set("section",$Section[0]->lib);
+                        if($state){
+                            $Section=Section::whereId($state)->get(["lib"]);
+                            $set("section",$Section[0]->lib);
+                        }
 
                     }),
                     Hidden::make("section")
@@ -153,8 +160,10 @@ class ListRecours extends ListRecords
                     ->required()
                     ->live()
                     ->afterStateUpdated(function($state,Set $set){
-                        $Jury=Jury::whereId($state)->get(["lib"]);
-                        $set("jury",$Jury[0]->lib);
+                        if($state){
+                            $Jury=Jury::whereId($state)->get(["lib"]);
+                            $set("jury",$Jury[0]->lib);
+                        }
                     }),
                     Hidden::make("jury")
                     ->disabled()
@@ -223,13 +232,16 @@ class ListRecours extends ListRecords
 
         $Classe=Classe::where("id",session("classe_id")[0] ?? 1)->first();
 
+
+
+
             return [
                 "$Section->lib | $Jury->lib | $Classe->lib"=>Tab::make()
                 ->modifyQueryUsing(function(Builder $query)
                 {
-                $query->get();
+                $query->where("classe_id",session("classe_id")[0] ?? 1);
 
-                })->badge(Recours::query()->count())
+                })->badge("Total recours : ".Recours::where("classe_id",session("classe_id")[0] ?? 1)->count())
                 ->icon("heroicon-o-calendar-days"),
                 'Tous'=>Tab::make()
                 ->badge(Recours::query()->count()),

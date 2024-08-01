@@ -26,6 +26,7 @@ class CreateRecours extends CreateRecord
         //Recherche de l'id Année
         $Jury=Jury::where("id",session("jury_id")[0] ?? 1)
                    ->first();
+        $data["classe_id"]=(int)session("classe_id")[0] ?? 1;
 
 
         $data["annee_id"]=$Jury->annee_id;
