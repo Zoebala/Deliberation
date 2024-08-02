@@ -128,4 +128,15 @@ class EtudiantResource extends Resource
             'edit' => Pages\EditEtudiant::route('/{record}/edit'),
         ];
     }
+
+    public static function getEloquentQuery(): Builder
+    {
+        if(!Auth()->user()->hasRole(["Admin","Jury"])){
+
+            return parent::getEloquentQuery()->where("user_id",Auth()->user()->id);
+        }else{
+            return parent::getEloquentQuery();
+
+        }
+    }
 }
