@@ -13,7 +13,7 @@ class UserPolicy
     public function viewAny(User $user): bool
     {
         //
-        return $user->hasRole('Admin');
+        return $user->hasPermissionTo("ViewAny Users");
     }
 
     /**
@@ -22,7 +22,7 @@ class UserPolicy
     public function view(User $user, User $model): bool
     {
         //
-        return $user->hasRole('Admin');
+        return $user->hasPermissionTo("View Users");
     }
 
     /**
@@ -31,7 +31,7 @@ class UserPolicy
     public function create(User $user): bool
     {
         //
-        return $user->hasRole('Admin');
+        return $user->hasPermissionTo("Create Users");
     }
 
     /**
@@ -40,7 +40,7 @@ class UserPolicy
     public function update(User $user, User $model): bool
     {
         //
-        return $user->hasRole('Admin');
+        return $user->hasPermissionTo("Update Users");
     }
 
     /**
@@ -49,12 +49,12 @@ class UserPolicy
     public function delete(User $user, User $model): bool
     {
         //
-        return $user->hasRole('Admin');
+        return $user->hasPermissionTo("Delete Users");
     }
     public function deleteAny(User $user): bool
     {
         //
-        return $user->hasRole('Admin');
+        return $user->hasPermissionTo("DeleteAny Users");
     }
 
     /**

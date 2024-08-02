@@ -15,6 +15,7 @@ class AnneePolicy
     {
         //
         return $user->hasPermissionTo("ViewAny Annees");
+       
     }
 
     /**

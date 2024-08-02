@@ -27,6 +27,8 @@ class CouponResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-clipboard-document-list';
     protected static ?string $navigationGroup ="Déliberation Management";
+    protected static ?string $modelLabel ="Coupons/Relevés";
+    protected static ?string $NavigationLabel ="Coupons/Relevés";
     protected static ?int $navigationSort = 90;
     public static function getNavigationBadge():string
     {

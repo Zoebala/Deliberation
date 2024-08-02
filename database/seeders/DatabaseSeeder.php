@@ -37,9 +37,9 @@ class DatabaseSeeder extends Seeder
                 ],
             ]);
 
-        /*----------------------------------------------------------------
-                Définition de l'administrateur
-        -----------------------------------------------------------------*/
+        // /*----------------------------------------------------------------
+        //         Définition de l'administrateur
+        // -----------------------------------------------------------------*/
         $User=User::factory()->create([
             'name' => 'Admin',
             'email' => 'admin@gmail.com',
@@ -48,7 +48,7 @@ class DatabaseSeeder extends Seeder
 
         $User->assignRole("Admin");
         /*----------------------------------------------------------------
-                Définition des permissions
+            Définition des permissions
         -----------------------------------------------------------------*/
           DB::table("permissions")->insert(
             [
@@ -93,6 +93,10 @@ class DatabaseSeeder extends Seeder
                     "guard_name"=>"web",
                 ],
                 [
+                    "name"=>"Create Users",
+                    "guard_name"=>"web",
+                ],
+                [
                     "name"=>"ViewAny Annees",
                     "guard_name"=>"web",
                 ],
@@ -130,6 +134,10 @@ class DatabaseSeeder extends Seeder
                 ],
                 [
                     "name"=>"ViewAny Recours",
+                    "guard_name"=>"web",
+                ],
+                [
+                    "name"=>"ViewAny Users",
                     "guard_name"=>"web",
                 ],
                 [
@@ -173,6 +181,10 @@ class DatabaseSeeder extends Seeder
                     "guard_name"=>"web",
                 ],
                 [
+                    "name"=>"View Users",
+                    "guard_name"=>"web",
+                ],
+                [
                     "name"=>"Update Annees",
                     "guard_name"=>"web",
                 ],
@@ -210,6 +222,10 @@ class DatabaseSeeder extends Seeder
                 ],
                 [
                     "name"=>"Update Recours",
+                    "guard_name"=>"web",
+                ],
+                [
+                    "name"=>"Update Users",
                     "guard_name"=>"web",
                 ],
                 [
@@ -253,6 +269,10 @@ class DatabaseSeeder extends Seeder
                     "guard_name"=>"web",
                 ],
                 [
+                    "name"=>"Delete Users",
+                    "guard_name"=>"web",
+                ],
+                [
                     "name"=>"DeleteAny Annees",
                     "guard_name"=>"web",
                 ],
@@ -292,6 +312,10 @@ class DatabaseSeeder extends Seeder
                     "name"=>"DeleteAny Recours",
                     "guard_name"=>"web",
                 ],
+                [
+                    "name"=>"DeleteAny Users",
+                    "guard_name"=>"web",
+                ],
             ]
           );
          /*----------------------------------------------------------------
@@ -301,9 +325,7 @@ class DatabaseSeeder extends Seeder
          $Jury=Role::findByName("Jury");
          $Jury->givePermissionTo([
                  "ViewAny Annees",
-                 "ViewAny Sections",
                  "ViewAny Semestres",
-                 "ViewAny Juries",
                  "ViewAny Classes",
                  "ViewAny Cours",
                  "ViewAny Etudiants",
@@ -337,7 +359,6 @@ class DatabaseSeeder extends Seeder
          $Etudiant=Role::findByName('Etudiant');
          $Etudiant->givePermissionTo([
             "ViewAny Annees",
-            "ViewAny Etudiants",
             "ViewAny Coupons",
             "ViewAny Recours",
             "Create Recours",

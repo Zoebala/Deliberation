@@ -129,14 +129,14 @@ class EtudiantResource extends Resource
         ];
     }
 
-    public static function getEloquentQuery(): Builder
-    {
-        if(!Auth()->user()->hasRole(["Admin","Jury"])){
+    // public static function getEloquentQuery(): Builder
+    // {
+    //     if(!Auth()->user()->hasRole(["Admin","Jury"])){
 
-            return parent::getEloquentQuery()->where("user_id",Auth()->user()->id);
-        }else{
-            return parent::getEloquentQuery();
+    //         return parent::getEloquentQuery()->where("user_id",Auth()->user()->id);
+    //     }else{
+    //         return parent::getEloquentQuery();
 
-        }
-    }
+    //     }
+    // }
 }
