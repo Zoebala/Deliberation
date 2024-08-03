@@ -164,4 +164,15 @@ class CouponResource extends Resource
             'edit' => Pages\EditCoupon::route('/{record}/edit'),
         ];
     }
+
+    //  public static function getEloquentQuery(): Builder
+    // {
+    //     if(Auth()->user()->hasRole(["Etudiant"])){
+
+    //         return parent::getEloquentQuery()->where("etudiant_id",Auth()->user()->id);
+    //     }else{
+    //         return parent::getEloquentQuery();
+
+    //     }
+    // }
 }
