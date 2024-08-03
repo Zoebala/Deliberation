@@ -44,14 +44,27 @@ class ListCoupons extends ListRecords
                     ->options(Section::all()->pluck("lib","id"))
                     ->searchable()
                     ->required()
-                    ->live(),
+                    ->live()
+                    ->afterStateUpdated(function(Set $set){
+                        $set("jury_id",null);
+                        $set("classe_id",null);
+                    }),
+                    Select::make("jury_id")
+                    ->label("Jury")
+                    ->options(function(Get $get){
+                         return Jury::where("section_id",$get("section_id"))->pluck("lib","id");
+                    })
+                    ->searchable()
+                    ->required()
+                    ->live()
+                    ->afterStateUpdated(function(Set $set){
+                        $set("classe_id",null);
+                    }),
                     Select::make("classe_id")
                     ->label("Classe")
                     ->options(function(Get $get){
-                        if(filled($get("section_id"))){
-                            $Jury=Jury::where("section_id",$get("section_id"))->first();
-                            return Classe::where("jury_id", $Jury->id)->pluck("lib","id");
-                        }
+                            return Classe::where("jury_id", $get("jury_id"))->pluck("lib","id");
+
                     })
                     ->searchable()
                     ->required()
