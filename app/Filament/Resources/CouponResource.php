@@ -71,6 +71,8 @@ class CouponResource extends Resource
                                      ->required()
                                      ->options(Cours::where("classe_id",session("classe_id")[0] ?? 1)->pluck("lib","id"))
                                      ->preload()
+                                     ->distinct()
+                                     ->disableOptionsWhenSelectedInSiblingRepeaterItems()
                                      ->searchable(),
                                 TextInput::make("tj")
                                      ->label("Cote TJ")
