@@ -165,14 +165,21 @@ class CouponResource extends Resource
         ];
     }
 
-    //  public static function getEloquentQuery(): Builder
-    // {
-    //     if(Auth()->user()->hasRole(["Etudiant"])){
+     public static function getEloquentQuery(): Builder
+    {
+        if(Auth()->user()->hasRole(["Etudiant"])){
+            //Identification de l'étudiant lié à l'utisateur
+            $Etudiant=Etudiant::where("user_id",Auth()->user()->id)->first();
 
-    //         return parent::getEloquentQuery()->where("etudiant_id",Auth()->user()->id);
-    //     }else{
-    //         return parent::getEloquentQuery();
+            if($Etudiant){
 
-    //     }
-    // }
+                return parent::getEloquentQuery()->where("etudiant_id",$Etudiant->id);
+            }
+
+            return parent::getEloquentQuery()->where("etudiant_id",null);
+        }else{
+            return parent::getEloquentQuery();
+
+        }
+    }
 }

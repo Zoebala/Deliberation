@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string("prenom",25);
             $table->string("genre",1);
             $table->unsignedBigInteger("classe_id");
+            $table->unsignedBigInteger("user_id")->nullable();
             $table->timestamps();
         });
     }

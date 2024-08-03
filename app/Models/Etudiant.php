@@ -12,7 +12,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 class Etudiant extends Model
 {
     use HasFactory;
-    protected $fillable=["nom","postnom","prenom","genre","classe_id","created_at","updated_at"];
+    protected $fillable=["nom","postnom","prenom","genre","classe_id","user_id","created_at","updated_at"];
 
     public function classe():BelongsTo
     {
