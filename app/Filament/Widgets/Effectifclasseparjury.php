@@ -13,6 +13,18 @@ class Effectifclasseparjury extends ChartWidget
     protected static bool $isLazy = false;
     protected static ?int $sort = 30;
 
+    public static function canView(): bool
+    {
+
+        if(Auth()->user()->hasRole(["Admin"])){
+
+            return true; 
+        }else{
+
+            return false;
+        }
+    }
+
     protected function getData(): array
     {
         $Juries=Jury::get("lib");

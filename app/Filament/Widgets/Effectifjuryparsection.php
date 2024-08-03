@@ -11,6 +11,18 @@ class Effectifjuryparsection extends ChartWidget
     protected static bool $isLazy = false;
     protected static ?int $sort = 20;
 
+    public static function canView(): bool
+    {
+
+        if(Auth()->user()->hasRole(["Admin"])){
+
+            return true;
+        }else{
+
+            return false;
+        }
+    }
+
     protected function getData(): array
     {
         $Sections=Section::get("lib");

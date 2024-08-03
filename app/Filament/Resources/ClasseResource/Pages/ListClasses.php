@@ -27,7 +27,8 @@ class ListClasses extends ListRecords
         return [
             Actions\CreateAction::make()
             ->label("Ajouter une Classe")
-            ->icon("heroicon-o-plus-circle"),
+            ->icon("heroicon-o-plus-circle")
+            ->hidden(fn():bool => session("jury_id") == null),
              Action::make("Choix Jury")
                 ->modalHeading("Choix du jury")
                 ->icon("heroicon-o-building-library")
@@ -115,7 +116,7 @@ class ListClasses extends ListRecords
         return Action::make("Section")
                 ->modalHeading("Choix du jury")
                 ->modalSubmitActionLabel("Définir")
-                ->visible(fn():bool => session("section_id") == null)
+                ->visible(fn():bool => session("jury_id") == null)
                 ->form([
                     Select::make("section_id")
                     ->label("Section")

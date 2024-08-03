@@ -30,7 +30,8 @@ class ListEtudiants extends ListRecords
         return [
             Actions\CreateAction::make()
             ->label("Ajouter Etudiant")
-            ->icon("heroicon-o-user-plus"),
+            ->icon("heroicon-o-user-plus")
+            ->hidden(fn():bool => session("classe_id") == null),
              Action::make("classe_choix")
                 ->icon("heroicon-o-building-office")
                 ->label("Choix de la Classe")
@@ -98,6 +99,7 @@ class ListEtudiants extends ListRecords
                 }),
             ImportAction::make("importation")
                     ->label("Importer Etudiants")
+                    ->hidden(fn():bool => session("classe_id") == null)
                     ->icon("heroicon-o-document-arrow-down")
                     ->fields([
                         ImportField::make('nom')

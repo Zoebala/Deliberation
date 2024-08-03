@@ -31,7 +31,8 @@ class ListCoupons extends ListRecords
         return [
             Actions\CreateAction::make()
                     ->label("Enregistrer un coupon")
-                    ->icon("heroicon-o-clipboard-document-list"),
+                    ->icon("heroicon-o-clipboard-document-list")
+                    ->hidden(fn():bool => session("classe_id") == null),
                 Action::make("classe_choix")
                  ->icon("heroicon-o-building-office")
                 ->label("Choix Classe")
@@ -99,6 +100,7 @@ class ListCoupons extends ListRecords
                 }),
                 Action::make("etudiant")
                     ->label("Relevés Etudiants non enregistrés")
+                    ->hidden(fn():bool => session("classe_id") == null)
                     ->modalSubmitActionLabel("D'accord!")
                     ->action(null)
                     ->color("warning")

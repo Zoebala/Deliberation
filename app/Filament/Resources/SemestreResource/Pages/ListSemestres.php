@@ -25,7 +25,55 @@ class ListSemestres extends ListRecords
         return [
             Actions\CreateAction::make()
             ->label("Ajouter un Semestre")
-            ->icon("heroicon-o-calendar"),
+            ->icon("heroicon-o-calendar")
+            ->hidden(fn():bool => session("Annee_id") == null),
+            Action::make("annee")
+            ->label("Choix année de travail")
+            ->form([
+                Select::make("annee")
+                ->label("Choix de l'année")
+                ->searchable()
+                ->required()
+                ->live()
+                ->afterStateUpdated(function($state,Set $set){
+                    $Annee=Annee::whereId($state)->get(["lib"]);
+                    $set("lib_annee",$Annee[0]->lib);
+
+
+
+                })
+                ->options(Annee::query()->pluck("lib","id")),
+                Hidden::make("lib_annee")
+                ->label("Année Choisie")
+                ->disabled()
+                ->dehydrated(true)
+            ])
+            ->modalWidth(MaxWidth::Medium)
+            ->modalIcon("heroicon-o-calendar")
+            ->action(function(array $data){
+                if(session('Annee_id')==NULL && session('Annee')==NULL){
+                    session()->push("Annee_id", $data["annee"]);
+                    session()->push("Annee", $data["lib_annee"]);
+
+                }else{
+                    session()->pull("Annee_id");
+                    session()->pull("Annee");
+                    session()->push("Annee_id", $data["annee"]);
+                    session()->push("Annee", $data["lib_annee"]);
+                }
+
+                // dd(session('Annee'));
+                Notification::make()
+                ->title("Fixation de l'annee de travail en ".$data['lib_annee'])
+                ->success()
+                 ->duration(5000)
+                ->send();
+
+
+                return redirect()->route("filament.admin.resources.semestres.index");
+
+
+            }),
         ];
     }
 

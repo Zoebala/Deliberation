@@ -26,7 +26,8 @@ class ListMembrejuries extends ListRecords
         return [
             Actions\CreateAction::make()
             ->label("Ajouter Membre Jury")
-            ->icon("heroicon-o-user-plus"),
+            ->icon("heroicon-o-user-plus")
+            ->hidden(fn():bool => session("section_id") == null),
             Action::make("Choix Section")
                 ->icon("heroicon-o-building-office-2")
                 ->modalHeading("Choix de la Section")

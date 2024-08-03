@@ -20,13 +20,26 @@ class StatAdminOverview extends BaseWidget
             ->color("success")
             ->chart([34,2,5,23])
             ->Icon("heroicon-o-building-office-2"),
-            Stat::make("Jurys", Jury::count())
-            ->description("Nos Jurys")
+            Stat::make("Jurys", function(){
+                if(session("section_id")){
+                    $toto="toto";
+                    return Jury::where("section_id",session("section_id")[0] ?? 1)->count();
+                }
+                 return Jury::count();
+            })
+            ->description(session("section")[0] ?? "Nos jurys")
             ->color("success")
             ->chart([34,2,5,23])
             ->Icon("heroicon-o-building-library"),
-            Stat::make("Recours", Recours::count())
-            ->description("Nos Recours")
+            Stat::make("Recours",function(){
+                if(session("classe_id")){
+
+                    return Recours::where("annee_id",session("Annee_id")[0] ?? 1)
+                                    ->where("classe_id",session("classe_id")[0] ?? 1)->count();
+                }
+               return Recours::where("annee_id",session("Annee_id")[0] ?? 1)->count();
+            })
+            ->description(session("classe")[0] ?? "Nos recours")
             ->color("danger")
             ->chart([34,2,5,23])
             ->Icon("heroicon-o-document-text"),

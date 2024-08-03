@@ -29,7 +29,8 @@ class ListRecours extends ListRecords
         return [
             Actions\CreateAction::make()
             ->label("Enregistrer un recours")
-            ->icon("heroicon-o-document-text"),
+            ->icon("heroicon-o-document-text")
+            ->hidden(fn():bool => session("classe_id") == null),
             Action::make("jury_choix")
                 ->icon("heroicon-o-building-library")
                 ->label("Choix de la Classe")
@@ -132,7 +133,7 @@ class ListRecours extends ListRecords
         return Action::make("Section")
                 ->modalHeading("Choix de la classe")
                 ->modalSubmitActionLabel("Définir")
-                ->visible(fn():bool => session("section_id") == null)
+                ->visible(fn():bool => session("classe_id") == null)
                 ->form([
                     Select::make("section_id")
                     ->label("Section")
@@ -231,9 +232,6 @@ class ListRecours extends ListRecords
         $Jury=Jury::whereId(session("jury_id")[0] ?? 1)->first();
 
         $Classe=Classe::where("id",session("classe_id")[0] ?? 1)->first();
-
-
-
 
             return [
                 "$Section->lib | $Jury->lib | $Classe->lib"=>Tab::make()

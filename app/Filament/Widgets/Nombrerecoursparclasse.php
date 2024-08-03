@@ -14,6 +14,18 @@ class Nombrerecoursparclasse extends ChartWidget
     protected int | string | array $columnSpan = 'full';
     protected static ?string $maxHeight = '270px';
 
+    public static function canView(): bool
+    {
+
+        if(Auth()->user()->hasRole(["Admin"])){
+
+            return true;
+        }else{
+
+            return false;
+        }
+    }
+
     protected function getData(): array
     {
         $Classes=Classe::get("lib");

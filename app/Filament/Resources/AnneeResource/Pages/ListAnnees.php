@@ -32,11 +32,11 @@ class ListAnnees extends ListRecords
                 ->required()
                 ->live()
                 ->afterStateUpdated(function($state,Set $set){
-                    $Annee=Annee::whereId($state)->get(["lib"]);
-                    $set("lib_annee",$Annee[0]->lib);
+                    if($state){
 
-
-
+                        $Annee=Annee::whereId($state)->get(["lib"]);
+                        $set("lib_annee",$Annee[0]->lib);
+                    }
                 })
                 ->options(Annee::query()->pluck("lib","id")),
                 Hidden::make("lib_annee")

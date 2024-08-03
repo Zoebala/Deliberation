@@ -12,6 +12,18 @@ class Nombrerecoursjury extends ChartWidget
     protected static bool $isLazy = false;
     protected static ?int $sort = 50;
 
+    public static function canView(): bool
+    {
+
+        if(Auth()->user()->hasRole(["Admin"])){
+
+            return true;
+        }else{
+
+            return false;
+        }
+    }
+
     protected function getData(): array
     {
         $Juries=Jury::get("lib");

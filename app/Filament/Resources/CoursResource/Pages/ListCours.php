@@ -26,7 +26,8 @@ class ListCours extends ListRecords
         return [
             Actions\CreateAction::make()
                     ->label("Ajouter un cours")
-                    ->icon("heroicon-o-book-open"),
+                    ->icon("heroicon-o-book-open")
+                    ->hidden(fn():bool => session("classe_id") == null),
                 Action::make("Section")
                 ->icon("heroicon-o-building-office")
                 ->label("Choix Classe")
@@ -106,7 +107,7 @@ class ListCours extends ListRecords
         return Action::make("Section")
                 ->modalHeading("Choix de la Classe")
                 ->modalSubmitActionLabel("Définir")
-                ->visible(fn():bool => session("semestre_id") == null)
+                ->visible(fn():bool => session("classe_id") == null)
                 ->form([
                     Select::make("semestre_id")
                     ->label("Semestre")
