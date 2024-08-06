@@ -207,8 +207,7 @@ class ListEtudiants extends ListRecords
                 })->badge(Etudiant::where("classe_id",session("classe_id")[0] ?? 1)
                                  ->count())
                 ->icon("heroicon-o-calendar-days"),
-                'Tous'=>Tab::make()
-                ->badge(Etudiant::query()->count()),
+               
 
             ];
 

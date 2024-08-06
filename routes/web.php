@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\CouponController;
 
 /*
 |--------------------------------------------------------------------------
@@ -17,3 +18,5 @@ Route::get('/', function () {
     // return view('welcome');
     return redirect("admin");
 });
+
+Route::get("coupon/{clef}/{classe_id}",[CouponController::class,"imprimer"])->name("coupon");

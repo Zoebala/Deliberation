@@ -28,4 +28,6 @@ class Coupon extends Model
     {
         return $this->hasMany(Elementcoupon::class);
     }
+
+    
 }

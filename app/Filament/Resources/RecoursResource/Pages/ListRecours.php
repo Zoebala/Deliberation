@@ -81,8 +81,10 @@ class ListRecours extends ListRecords
                     ->required()
                     ->live()
                     ->afterStateUpdated(function($state,Set $set){
-                        $Classe=Classe::whereId($state)->get(["lib"]);
-                        $set("classe",$Classe[0]->lib);
+                        if($state){
+                            $Classe=Classe::whereId($state)->get(["lib"]);
+                            $set("classe",$Classe[0]->lib);
+                        }
 
                     }),
                     Hidden::make("classe")
@@ -92,7 +94,7 @@ class ListRecours extends ListRecords
                 ->modalWidth(MaxWidth::Medium)
                 ->modalIcon("heroicon-o-building-office-2")
                 ->action(function(array $data){
-                    if(session('section_id')==NULL && session('section')==NULL){
+                    if(session('classe_id')==NULL && session('classe')==NULL){
 
                         session()->push("section_id", $data["section_id"]);
                         session()->push("section", $data["section"]);
@@ -340,8 +342,7 @@ class ListRecours extends ListRecords
 
                 })->badge("Total recours : ".Recours::where("classe_id",session("classe_id")[0] ?? 1)->count())
                 ->icon("heroicon-o-calendar-days"),
-                'Tous'=>Tab::make()
-                ->badge(Recours::query()->count()),
+               
 
             ];
 

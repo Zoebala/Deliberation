@@ -149,8 +149,7 @@ class ListJuries extends ListRecords
                 })->badge(Jury::query()
                 ->where("annee_id",session("Annee_id")[0] ?? 1)->count())
                 ->icon("heroicon-o-calendar-days"),
-                'Tous'=>Tab::make()
-                ->badge(Jury::query()->count()),
+                
 
             ];
 

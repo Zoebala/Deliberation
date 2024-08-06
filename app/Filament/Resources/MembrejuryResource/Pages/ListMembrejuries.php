@@ -158,8 +158,7 @@ class ListMembrejuries extends ListRecords
                 ->join("juries","juries.id","membrejuries.jury_id")
                 ->where("section_id",session("section_id")[0] ?? 1)->count())
                 ->icon("heroicon-o-calendar-days"),
-                'Tous'=>Tab::make()
-                ->badge(Membrejury::query()->count()),
+               
 
             ];
 

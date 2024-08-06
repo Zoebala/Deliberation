@@ -27,8 +27,8 @@ class CouponResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-clipboard-document-list';
     protected static ?string $navigationGroup ="Déliberation Management";
-    protected static ?string $modelLabel ="Coupons/Relevés";
-    protected static ?string $NavigationLabel ="Coupons/Relevés";
+    protected static ?string $modelLabel ="Fiche Centralisatrice cotes";
+    protected static ?string $NavigationLabel ="Fiches Centralisatrice cotes";
     protected static ?int $navigationSort = 90;
     public static function getNavigationBadge():string
     {
@@ -142,6 +142,16 @@ class CouponResource extends Resource
 
                     Tables\Actions\EditAction::make(),
                     Tables\Actions\DeleteAction::make(),
+                    Tables\Actions\Action::make("Imprimer Relevé")
+                                   ->icon("heroicon-o-document-text")
+                                   ->action(function(Coupon $clef){
+                                        if(session("classe_id")){
+                                            $classe_id=(int)session("classe_id")[0] ?? 1;
+                                            return redirect()->route("coupon",compact("clef","classe_id"));
+                                        }
+                                        $classe_id=1;
+                                        return redirect()->route("coupon",compact("clef","classe_id"));
+                                   }),
                 ])->button()->label("Actions")
             ])
             ->bulkActions([
