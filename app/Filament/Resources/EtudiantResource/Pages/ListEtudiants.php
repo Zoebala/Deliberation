@@ -28,6 +28,11 @@ class ListEtudiants extends ListRecords
     protected function getHeaderActions(): array
     {
         return [
+            Actions\Action::make("Accueil")
+            ->icon("heroicon-o-home")
+            ->action(function(){
+                return redirect("/");
+            }),
             Actions\CreateAction::make()
             ->label("Ajouter Etudiant")
             ->icon("heroicon-o-user-plus")
@@ -207,7 +212,7 @@ class ListEtudiants extends ListRecords
                 })->badge(Etudiant::where("classe_id",session("classe_id")[0] ?? 1)
                                  ->count())
                 ->icon("heroicon-o-calendar-days"),
-               
+
 
             ];
 

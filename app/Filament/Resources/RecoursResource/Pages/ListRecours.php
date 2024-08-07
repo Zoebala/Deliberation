@@ -28,6 +28,11 @@ class ListRecours extends ListRecords
     protected function getHeaderActions(): array
     {
         return [
+            Actions\Action::make("Accueil")
+            ->icon("heroicon-o-home")
+            ->action(function(){
+                return redirect("/");
+            }),
             Actions\CreateAction::make()
             ->label("Enregistrer un recours")
             ->icon("heroicon-o-document-text")
@@ -342,7 +347,7 @@ class ListRecours extends ListRecords
 
                 })->badge("Total recours : ".Recours::where("classe_id",session("classe_id")[0] ?? 1)->count())
                 ->icon("heroicon-o-calendar-days"),
-               
+
 
             ];
 

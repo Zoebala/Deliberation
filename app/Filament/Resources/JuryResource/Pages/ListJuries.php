@@ -23,6 +23,11 @@ class ListJuries extends ListRecords
     protected function getHeaderActions(): array
     {
         return [
+            Actions\Action::make("Accueil")
+            ->icon("heroicon-o-home")
+            ->action(function(){
+                return redirect("/");
+            }),
             Actions\CreateAction::make()
             ->label("Ajouter un Jury")
             ->icon("heroicon-o-building-library")
@@ -149,7 +154,7 @@ class ListJuries extends ListRecords
                 })->badge(Jury::query()
                 ->where("annee_id",session("Annee_id")[0] ?? 1)->count())
                 ->icon("heroicon-o-calendar-days"),
-                
+
 
             ];
 

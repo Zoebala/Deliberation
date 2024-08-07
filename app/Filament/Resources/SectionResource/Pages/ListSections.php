@@ -13,6 +13,11 @@ class ListSections extends ListRecords
     protected function getHeaderActions(): array
     {
         return [
+            Actions\Action::make("Accueil")
+            ->icon("heroicon-o-home")
+            ->action(function(){
+                return redirect("/");
+            }),
             Actions\CreateAction::make()
             ->label("Nouvelle Section/faculté")
             ->icon("heroicon-o-building-office-2"),

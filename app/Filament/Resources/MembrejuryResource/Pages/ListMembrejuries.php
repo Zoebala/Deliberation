@@ -24,6 +24,11 @@ class ListMembrejuries extends ListRecords
     protected function getHeaderActions(): array
     {
         return [
+            Actions\Action::make("Accueil")
+            ->icon("heroicon-o-home")
+            ->action(function(){
+                return redirect("/");
+            }),
             Actions\CreateAction::make()
             ->label("Ajouter Membre Jury")
             ->icon("heroicon-o-user-plus")
@@ -158,7 +163,7 @@ class ListMembrejuries extends ListRecords
                 ->join("juries","juries.id","membrejuries.jury_id")
                 ->where("section_id",session("section_id")[0] ?? 1)->count())
                 ->icon("heroicon-o-calendar-days"),
-               
+
 
             ];
 

@@ -28,7 +28,13 @@ class ListCoupons extends ListRecords
 
     protected function getHeaderActions(): array
     {
+
         return [
+            Actions\Action::make("Accueil")
+            ->icon("heroicon-o-home")
+            ->action(function(){
+                return redirect("/");
+            }),
             Actions\CreateAction::make()
                     ->label("Enregistrer un coupon")
                     ->icon("heroicon-o-clipboard-document-list")
