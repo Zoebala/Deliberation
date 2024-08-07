@@ -13,7 +13,14 @@ class ListActualites extends ListRecords
     protected function getHeaderActions(): array
     {
         return [
-            Actions\CreateAction::make(),
+            Actions\Action::make("Accueil")
+            ->icon("heroicon-o-home")
+            ->action(function(){
+                return redirect("/");
+            }),
+            Actions\CreateAction::make()
+            ->label("Ajouter une actualité")
+            ->icon("heroicon-o-document-text"),
         ];
     }
 }

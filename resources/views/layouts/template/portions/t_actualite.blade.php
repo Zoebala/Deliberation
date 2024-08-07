@@ -8,7 +8,7 @@
                 <div class="swiper-slide">
                     <div class="testimonial-item">
 
-                    <img src="{{asset('storage/'.$Actualite->photo)}}" class="testimonial-img"  alt="logo">
+                    <img src="{{asset('storage/'.$Actualite->photo)}}" width="130px;" height="130px;" class="rounded-circle"  alt="logo">
                     <h3>{{ $Actualite->objet }}</h3>
                     <h4>Publié le  {{ $Actualite->created_at->format("d/m/Y à H:i:s")  }} </h4>
                     <p>

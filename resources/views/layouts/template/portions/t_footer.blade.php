@@ -11,7 +11,7 @@
             <p>
               A108 Adam Street <br>
               New York, NY 535022<br>
-              Ville de Muanda <br><br>
+              Ville de Mbanza-ngungu <br><br>
               <strong>Phone:</strong> +1 5589 55488 55<br>
               <strong>Email:</strong> istmbanzangungu@example.com<br>
             </p>
