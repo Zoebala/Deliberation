@@ -7,13 +7,13 @@
         <div class="row">
 
           <div class="col-lg-3 col-md-6 footer-contact">
-            <h3>Université de Muanda<span>.</span></h3>
+            <h3>IST Mbanza-Ngungu<span>.</span></h3>
             <p>
               A108 Adam Street <br>
               New York, NY 535022<br>
               Ville de Muanda <br><br>
               <strong>Phone:</strong> +1 5589 55488 55<br>
-              <strong>Email:</strong> muandauniversite@example.com<br>
+              <strong>Email:</strong> istmbanzangungu@example.com<br>
             </p>
           </div>
 
@@ -61,14 +61,14 @@
 
     <div class="container py-4">
       <div class="copyright">
-        &copy; Copyright <strong><span>Université de muadnda</span></strong>. Tous droits reservés.
+        &copy; Copyright <strong><span>Institut Supérieur Technique</span></strong>. Tous droits reservés.
       </div>
       <div class="credits">
         <!-- All the links in the footer should remain intact. -->
         <!-- You can delete the links only if you purchased the pro version. -->
         <!-- Licensing information: https://bootstrapmade.com/license/ -->
         <!-- Purchase the pro version with working PHP/AJAX contact form: https://bootstrapmade.com/bizland-bootstrap-business-template/ -->
-        Designed by <a href="#">Oeil Coge</a>
+        Designed by <a href="#">BZ</a>
       </div>
     </div>
   </footer>
