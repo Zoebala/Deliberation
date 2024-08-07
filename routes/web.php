@@ -1,5 +1,9 @@
 <?php
 
+use App\Models\User;
+use App\Models\Section;
+use App\Models\Etudiant;
+use App\Models\Actualite;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CouponController;
 
@@ -15,8 +19,19 @@ use App\Http\Controllers\CouponController;
 */
 
 Route::get('/', function () {
-    // return view('welcome');
-    return redirect("admin");
+
+    $Sections=Section::all();
+    $Actualites=Actualite::query()->Orderby('id',"desc")->take(5)->get();
+
+    //On vérifie s'il y a un utilisateur authentifié
+    if(Auth::user()){
+        $Etudiant=Etudiant::where("user_id",Auth()->user()->id)->first();
+
+        $User=User::whereId(Auth()->user()->id)->first();
+        return view('welcome',compact('Sections',"Actualites","Etudiant","User"));
+    }
+
+    return view('welcome',compact('Sections',"Actualites"));
 });
 
 Route::get("coupon/{clef}/{classe_id}",[CouponController::class,"imprimer"])->name("coupon");

@@ -1,9 +1,9 @@
-@include("layout.header")
+@include("layouts.header")
 
 <div class="container">
     @yield("contenu")
 </div>
 
 
-@include("layout.footer")
+@include("layouts.footer")
 
