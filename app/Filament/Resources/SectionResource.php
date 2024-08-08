@@ -54,10 +54,21 @@ class SectionResource extends Resource
                             ->placeholder("Ex: Techniques")
                             ->maxLength(255)
                             ->columnSpan(1),
-                    ]),
+                        TextInput::make("chef_section")
+                            ->label("Chef de Section")
+                            ->required()
+                            ->placeholder("Ex: Jhon Dupon"),
+                        TextInput::make("grade")
+                            ->label("Grade Académique")
+                            ->required()
+                            ->placeholder("Ex: Professeur Associé"),
+
+                    ])->columns(3),
                     Step::make("Description")
                     ->schema([
-                        MarkdownEditor::make('description')->columnSpanFull(),
+                        MarkdownEditor::make('description')
+                        ->label("Description Section")
+                        ->columnSpanFull(),
                     ])
                 ])->columns(2)->columnSpanFull(),
             ]);
@@ -70,6 +81,14 @@ class SectionResource extends Resource
                 //
                 TextColumn::make('lib')
                     ->label("Section")
+                    ->searchable(),
+                TextColumn::make('chef_section')
+                    ->label("Chef de Section")
+                    ->placeholder("Non défini")
+                    ->searchable(),
+                TextColumn::make('grade')
+                    ->label("Grade Académique")
+                    ->placeholder("Non défini")
                     ->searchable(),
                 TextColumn::make('description')
                     ->label("Description")

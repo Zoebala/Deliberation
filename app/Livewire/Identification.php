@@ -27,7 +27,7 @@ class Identification extends Component
         //attribution des permissions à l'utilisateur
         $User->assignRole("Etudiant");
 
-        return redirect("/admin/etudiants");
+        return redirect()->route("filament.admin.auth.login");
     }
 
     public function render()

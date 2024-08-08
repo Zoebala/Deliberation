@@ -11,7 +11,7 @@ class Section extends Model
 {
     use HasFactory;
 
-    protected $fillable=["lib","description","created_at","updated_at"];
+    protected $fillable=["lib","description","chef_section","grade","created_at","updated_at"];
 
     public function jury():HasMany
     {

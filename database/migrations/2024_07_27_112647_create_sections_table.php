@@ -15,6 +15,8 @@ return new class extends Migration
             $table->id();
             $table->string("lib",50);
             $table->text("description")->nullable();
+            $table->string("chef_section")->nullable();
+            $table->string("grade")->nullable();
             $table->timestamps();
         });
     }

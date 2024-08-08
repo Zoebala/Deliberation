@@ -11,11 +11,14 @@ use Filament\Resources\Resource;
 use Filament\Resources\Pages\Page;
 use Illuminate\Support\Facades\Hash;
 use Filament\Forms\Components\Select;
+use Filament\Forms\Components\Wizard;
 use Filament\Forms\Components\Section;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Forms\Components\TextInput;
 use Filament\Tables\Actions\ActionGroup;
+use Filament\Forms\Components\FileUpload;
 use Illuminate\Database\Eloquent\Builder;
+use Filament\Forms\Components\Wizard\Step;
 use App\Filament\Resources\UserResource\Pages;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Resources\UserResource\Pages\CreateUser;
@@ -55,35 +58,51 @@ class UserResource extends Resource
                 Section::make("Définition Utilisateur")
                 ->Icon("heroicon-o-user-plus")
                 ->schema([
+                    Wizard::make([
+                        Step::make("Identité User")
+                        ->schema([
+                            TextInput::make('name')
+                                ->required()
+                                ->placeholder("Ex: User")
+                                ->maxLength(255)
+                                ->columnSpan(1),
+                            TextInput::make('email')
+                                ->email()
+                                ->unique(ignoreRecord:true)
+                                ->placeholder("Ex: user@example.com")
+                                ->required()
+                                ->maxLength(255)
+                                ->columnSpan(1),
+                            // DateTimePicker::make('email_verified_at'),
+                            TextInput::make('password')
+                                ->password()
+                                ->placeholder("Ex : password")
+                                ->dehydrateStateUsing(fn($state)=>Hash::make($state))
+                                ->dehydrated(fn($state)=> filled($state))
+                                ->required(fn(Page $livewire) =>($livewire instanceof CreateUser) )
+                                ->maxLength(255)
+                                ->columnSpan(1),
+                            Select::make("roles")
+                                ->label("Roles")
+                                ->searchable()
+                                ->preload()
+                                ->multiple()
+                                ->relationship("roles","name")
+                                ->hidden(fn():bool => !Auth()->user()->hasRole(["Admin"])),
+                        ]),
+                        Step::make("Profil User")
+                        ->schema([
+                            FileUpload::make('photo')
+                            ->label("Photo")
+                            ->required()
+                             ->openable()
+                            ->downloadable()
+                            ->maxSize("2048")
+                            ->disk("public")->directory("profiles")
+                            ->columnSpanFull(),
+                        ]),
+                    ])->columnSpanFull()->columns(2),
 
-                    TextInput::make('name')
-                        ->required()
-                        ->placeholder("Ex: User")
-                        ->maxLength(255)
-                        ->columnSpan(1),
-                    TextInput::make('email')
-                        ->email()
-                        ->unique(ignoreRecord:true)
-                        ->placeholder("Ex: user@example.com")
-                        ->required()
-                        ->maxLength(255)
-                        ->columnSpan(1),
-                    // DateTimePicker::make('email_verified_at'),
-                    TextInput::make('password')
-                        ->password()
-                        ->placeholder("Ex : password")
-                        ->dehydrateStateUsing(fn($state)=>Hash::make($state))
-                        ->dehydrated(fn($state)=> filled($state))
-                        ->required(fn(Page $livewire) =>($livewire instanceof CreateUser) )
-                        ->maxLength(255)
-                        ->columnSpan(1),
-                    Select::make("roles")
-                        ->label("Roles")
-                        ->searchable()
-                        ->preload()
-                        ->multiple()
-                        ->relationship("roles","name")
-                        ->hidden(fn():bool => !Auth()->user()->hasRole(["Admin"])),
                     //
                 ])->columns(2),
             ]);
@@ -99,6 +118,8 @@ class UserResource extends Resource
                     ->numeric()
                     ->hidden(fn():bool => !Auth()->user()->hasRole(["Admin"]))
                     ->sortable(),
+                Tables\Columns\ImageColumn::make('photo')
+                    ->searchable(),
                 TextColumn::make('name')
                     ->label("Nom")
                     ->searchable(),

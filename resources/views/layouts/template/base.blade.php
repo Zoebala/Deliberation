@@ -27,6 +27,7 @@
 
     <!-- ======= About Section ======= -->
     @include("layouts.template.portions.t_apropos")
+    @include("layouts.template.portions.t_section")
     <!-- End About Section -->
 
     <!-- ======= Skills Section ======= -->
