@@ -14,7 +14,10 @@ class SectionNombreRecoursparClasse extends ChartWidget
 
     protected function getData(): array
     {
-        $Classes=Classe::get("lib");
+
+        $Classes=Classe::join("juries","juries.id","classes.jury_id")
+                        ->where("section_id",session("section_id")[0] ?? 1)
+                        ->get("classes.lib");
         $tableau=[];$ClasseId=[];$Effectifparclasse=[];
         //mise des valeurs de l'objet dans la variable tableau
         foreach ($Classes as $Classe) {
@@ -22,7 +25,9 @@ class SectionNombreRecoursparClasse extends ChartWidget
         }
 
 
-        $Classes=Classe::get(["lib","id"]);
+        $Classes=Classe::join("juries","juries.id","classes.jury_id")
+                        ->where("section_id",session("section_id")[0] ?? 1)
+                        ->get(["classes.lib","classes.id"]);
         //récupération des clefs de Classes
         foreach ($Classes as $Classe){
             $ClasseId[]=$Classe->id;

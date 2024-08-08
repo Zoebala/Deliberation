@@ -14,7 +14,7 @@ class SectionEffectifClasseparJury extends ChartWidget
 
     protected function getData(): array
     {
-        $Juries=Jury::get("lib");
+        $Juries=Jury::where("section_id",session("section_id")[0] ?? 1)->get("lib");
         $tableau=[];$JuryId=[];$Effectifparjury=[];
         //mise des valeurs de l'objet dans la variable tableau
         foreach ($Juries as $Jury) {
@@ -22,7 +22,7 @@ class SectionEffectifClasseparJury extends ChartWidget
         }
 
 
-        $Juries=Jury::get(["lib","id"]);
+        $Juries=Jury::where("section_id",session("section_id")[0] ?? 1)->get(["lib","id"]);
         //récupération des clefs de Juries
         foreach ($Juries as $Jury){
             $JuryId[]=$Jury->id;
