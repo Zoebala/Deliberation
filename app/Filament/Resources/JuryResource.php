@@ -114,10 +114,6 @@ class JuryResource extends Resource
         return $table
             ->columns([
                 //
-                TextColumn::make("section.lib")
-                ->label("Section")
-                ->searchable()
-                ->sortable(),
                 TextColumn::make("lib")
                 ->label("Jury")
                 ->searchable()

@@ -12,6 +12,7 @@ use Filament\Forms\Components\Select;
 use Filament\Notifications\Notification;
 use Filament\Resources\Pages\ListRecords;
 use App\Filament\Resources\SectionResource;
+use Filament\Resources\Pages\ListRecords\Tab;
 use App\Filament\Resources\SectionResouceResource\Widgets\StatSectionOverview;
 use App\Filament\Resources\SectionResource\Widgets\SectionNombreRecoursparJury;
 use App\Filament\Resources\SectionResource\Widgets\SectionEffectifClasseparJury;
@@ -30,6 +31,57 @@ class ListSections extends ListRecords
             ->action(function(){
                 return redirect("/");
             }),
+            Action::make("Section_choix")
+                ->label("Choix Section")
+                ->icon("heroicon-o-building-office-2")
+                ->modalSubmitActionLabel("Définir")
+                ->form([
+                    Select::make("section_id")
+                    ->label("Section")
+                    ->searchable()
+                    ->required()
+                    ->live()
+                    ->options(Section::query()->pluck("lib","id"))
+                    ->afterStateUpdated(function($state,Set $set){
+                        if($state){
+                            $Section=Section::whereId($state)->get(["lib"]);
+                            $set("section",$Section[0]->lib);
+                        }
+
+                    }),
+                    Hidden::make("section")
+                    ->label("Année Choisie")
+                    ->disabled()
+                    ->dehydrated(true),
+
+
+                ])
+                ->modalWidth(MaxWidth::Medium)
+                ->modalIcon("heroicon-o-building-office-2")
+                ->action(function(array $data){
+                    if(session('section_id')==NULL && session('section')==NULL){
+
+                        session()->push("section_id", $data["section_id"]);
+                        session()->push("section", $data["section"]);
+
+                    }else{
+                        session()->pull("section_id");
+                        session()->pull("section");
+                        session()->push("section_id", $data["section_id"]);
+                        session()->push("section", $data["section"]);
+
+
+                    }
+
+                    // dd(session('Annee'));
+                    Notification::make()
+                    ->title("Section Choisie :  ".$data['section'])
+                    ->success()
+                     ->duration(5000)
+                    ->send();
+                     return redirect()->route("filament.admin.resources.sections.index");
+
+                }),
             Actions\CreateAction::make()
             ->label("Nouvelle Section/faculté")
             ->icon("heroicon-o-building-office-2"),
@@ -62,7 +114,7 @@ class ListSections extends ListRecords
     {
 
         return Action::make("Section")
-                ->modalHeading("Choix du jury")
+                ->modalHeading("Choix Section")
                 ->modalSubmitActionLabel("Définir")
                 ->visible(fn():bool => session("section_id") == null)
                 ->form([
@@ -112,6 +164,20 @@ class ListSections extends ListRecords
                      return redirect()->route("filament.admin.resources.sections.index");
 
                 });
+
+    }
+
+    public function getTabs():array
+    {
+
+        $Section=Section::where("id",session("section_id")[0] ?? 1)->first();
+
+
+
+            return [
+                "Section Sélectionnée : $Section->lib"=>Tab::make(),
+
+            ];
 
     }
 

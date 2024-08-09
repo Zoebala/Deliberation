@@ -10,7 +10,6 @@ class SectionEffectifClasseparJury extends ChartWidget
 {
     protected static ?string $heading = 'Effectif Classe par Jury';
     protected static bool $isLazy = false;
-    protected static ?string $maxHeight = '270px';
 
     protected function getData(): array
     {

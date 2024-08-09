@@ -24,16 +24,11 @@ class CreateCoupon extends CreateRecord
 
     protected function mutateFormDataBeforeCreate(array $data):array
     {
-        //Recherche de l'id Année
-        $Classe=Classe::join("juries","juries.id","classes.jury_id")
-                   ->where("classes.id",session("classe_id")[0] ?? 1)
-                   ->first();
-
-
-        $data["annee_id"]=$Classe->annee_id;
+        
+        $data["semestre"]=(int)sessin("semestre_id")[0] ?? 1;
 
         $data["classe_id"]=(int)session("classe_id")[0] ?? 1;
-        
+
         return $data;
     }
 }

@@ -32,7 +32,7 @@ class SectionNombreRecoursparJury extends ChartWidget
             $Effectifparjury[]=Jury::join("classes","classes.jury_id","juries.id")
                                     ->join("recours","recours.classe_id","classes.id")
                                     ->join("annees","annees.id","juries.annee_id")
-                                    ->where("annees.id",session('Annee_id') ?? 1)
+                                    ->where("recours.semestre_id",session('semestre_id')[0] ?? 1)
                                     ->where("section_id",session("section_id")[0] ?? 1)
                                     ->where("juries.id",$index)
                                     ->count();

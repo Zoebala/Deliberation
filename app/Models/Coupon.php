@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Models\Annee;
 use App\Models\Etudiant;
+use App\Models\Semestre;
 use App\Models\Elementcoupon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -13,11 +14,11 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 class Coupon extends Model
 {
     use HasFactory;
-    protected $fillable=["annee_id","etudiant_id","classe_id"];
+    protected $fillable=["semestre_id","etudiant_id","classe_id"];
 
-    public function annee():BelongsTo
+    public function semestre():BelongsTo
     {
-        return $this->belongsTo(Annee::class);
+        return $this->belongsTo(Semestre::class);
     }
     public function etudiant():BelongsTo
     {
@@ -29,5 +30,5 @@ class Coupon extends Model
         return $this->hasMany(Elementcoupon::class);
     }
 
-    
+
 }

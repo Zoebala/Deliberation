@@ -23,13 +23,9 @@ class CreateRecours extends CreateRecord
 
     protected function mutateFormDataBeforeCreate(array $data):array
     {
-        //Recherche de l'id Année
-        $Jury=Jury::where("id",session("jury_id")[0] ?? 1)
-                   ->first();
+
         $data["classe_id"]=(int)session("classe_id")[0] ?? 1;
-
-
-        $data["annee_id"]=$Jury->annee_id;
+        $data["semestre_id"]=(int)session("semestre_id")[0] ?? 1;
 
         return $data;
     }

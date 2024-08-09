@@ -5,6 +5,7 @@ namespace App\Filament\Resources\JuryResource\Pages;
 use App\Models\Jury;
 use App\Models\Annee;
 use Filament\Actions;
+use App\Models\Section;
 use Filament\Forms\Set;
 use Filament\Actions\Action;
 use Filament\Support\Enums\MaxWidth;
@@ -32,8 +33,10 @@ class ListJuries extends ListRecords
             ->label("Ajouter un Jury")
             ->icon("heroicon-o-building-library")
             ->hidden(fn():bool => session("Annee_id") == null),
-            Action::make("annee")
-            ->label("Choix année de travail")
+            Action::make("annee_choix")
+            ->label("Choix Année & Section")
+            ->icon("heroicon-o-calendar-days")
+            ->modalSubmitActionLabel("Définir")
             ->form([
                 Select::make("annee")
                 ->label("Choix de l'année")
@@ -50,20 +53,47 @@ class ListJuries extends ListRecords
                 Hidden::make("lib_annee")
                 ->label("Année Choisie")
                 ->disabled()
-                ->dehydrated(true)
+                ->dehydrated(true),
+                Select::make("section_id")
+                ->label("Section")
+                ->searchable()
+                ->required()
+                ->live()
+                ->options(Section::query()->pluck("lib","id"))
+                ->afterStateUpdated(function($state,Set $set){
+                    if($state){
+                        $Section=Section::whereId($state)->get(["lib"]);
+                        $set("section",$Section[0]->lib);
+                    }
+
+                }),
+                Hidden::make("section")
+                ->label("Année Choisie")
+                ->disabled()
+                ->dehydrated(true),
+
+
             ])
             ->modalWidth(MaxWidth::Medium)
             ->modalIcon("heroicon-o-calendar")
             ->action(function(array $data){
                 if(session('Annee_id')==NULL && session('Annee')==NULL){
+
                     session()->push("Annee_id", $data["annee"]);
                     session()->push("Annee", $data["lib_annee"]);
+                    session()->push("section_id", $data["section_id"]);
+                    session()->push("section", $data["section"]);
 
                 }else{
                     session()->pull("Annee_id");
                     session()->pull("Annee");
+                    session()->pull("section_id");
+                    session()->pull("section");
                     session()->push("Annee_id", $data["annee"]);
                     session()->push("Annee", $data["lib_annee"]);
+                    session()->push("section_id", $data["section_id"]);
+                    session()->push("section", $data["section"]);
+
                 }
 
                 // dd(session('Annee'));
@@ -72,10 +102,7 @@ class ListJuries extends ListRecords
                 ->success()
                  ->duration(5000)
                 ->send();
-
-
-                return redirect()->route("filament.admin.resources.juries.index");
-
+                 return redirect()->route("filament.admin.resources.juries.index");
 
             }),
         ];
@@ -87,9 +114,9 @@ class ListJuries extends ListRecords
     {
 
         return Action::make("Annee")
-                ->modalHeading("Définition de l'année de travail")
+                ->modalHeading("Choix Année & Section")
                 ->modalSubmitActionLabel("Définir")
-                ->visible(fn():bool => session("Annee_id") == null)
+                ->visible(fn():bool => session("section_id") == null)
                 ->form([
                     Select::make("annee")
                     ->label("Choix de l'année")
@@ -102,34 +129,55 @@ class ListJuries extends ListRecords
                             $set("lib_annee",$Annee[0]->lib);
                         }
                     })
-                ->options(Annee::query()->pluck("lib","id")),
+                    ->options(Annee::query()->pluck("lib","id")),
                     Hidden::make("lib_annee")
                     ->label("Année Choisie")
                     ->disabled()
-                    // ->hidden()
-                    ->dehydrated(true)
+                    ->dehydrated(true),
+                    Select::make("section_id")
+                    ->label("Section")
+                    ->searchable()
+                    ->required()
+                    ->live()
+                    ->options(Section::query()->pluck("lib","id"))
+                    ->afterStateUpdated(function($state,Set $set){
+                        if($state){
+                            $Section=Section::whereId($state)->get(["lib"]);
+                            $set("section",$Section[0]->lib);
+                        }
+
+                    }),
+                    Hidden::make("section")
+                    ->label("Année Choisie")
+                    ->disabled()
+                    ->dehydrated(true),
 
 
                 ])
                 ->modalWidth(MaxWidth::Medium)
                 ->modalIcon("heroicon-o-calendar")
                 ->action(function(array $data){
-                    if(session('Annee_id')==NULL && session('Annee')==NULL){
+                    if(session('Annee_id')==NULL){
 
                         session()->push("Annee_id", $data["annee"]);
                         session()->push("Annee", $data["lib_annee"]);
+                        session()->push("section_id", $data["section_id"]);
+                        session()->push("section", $data["section"]);
 
                     }else{
                         session()->pull("Annee_id");
                         session()->pull("Annee");
+                        session()->pull("section_id");
+                        session()->pull("section");
                         session()->push("Annee_id", $data["annee"]);
                         session()->push("Annee", $data["lib_annee"]);
+                        session()->push("section_id", $data["section_id"]);
+                        session()->push("section", $data["section"]);
 
                     }
 
-                    // dd(session('Annee'));
                     Notification::make()
-                    ->title("Fixation de l'annee de travail en ".$data['lib_annee'])
+                    ->title("Annee ".$data['lib_annee']." & Section choisie : ".$data["section"])
                     ->success()
                      ->duration(5000)
                     ->send();
@@ -143,16 +191,19 @@ class ListJuries extends ListRecords
     {
 
         $Annee=Annee::where("id",session("Annee_id")[0] ?? 1)->first();
+        $Section=Section::where("id",session("section_id")[0] ?? 1)->first();
 
 
             return [
-                "$Annee->lib"=>Tab::make()
+                "$Annee->lib | $Section->lib"=>Tab::make()
                 ->modifyQueryUsing(function(Builder $query)
                 {
-                $query->where("annee_id",session("Annee_id")[0] ?? 1);
+                $query->where("annee_id",session("Annee_id")[0] ?? 1)
+                     ->where("section_id",session("section_id")[0] ?? 1);
 
                 })->badge(Jury::query()
-                ->where("annee_id",session("Annee_id")[0] ?? 1)->count())
+                ->where("annee_id",session("Annee_id")[0] ?? 1)
+                ->where("section_id",session("section_id")[0] ?? 1)->count())
                 ->icon("heroicon-o-calendar-days"),
 
 

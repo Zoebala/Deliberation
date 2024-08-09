@@ -35,10 +35,10 @@ class StatAdminOverview extends BaseWidget
             Stat::make("Recours",function(){
                 if(session("classe_id")){
 
-                    return Recours::where("annee_id",session("Annee_id")[0] ?? 1)
+                    return Recours::where("semestre_id",session("semestre_id")[0] ?? 1)
                                     ->where("classe_id",session("classe_id")[0] ?? 1)->count();
                 }
-               return Recours::where("annee_id",session("Annee_id")[0] ?? 1)->count();
+               return Recours::where("semestre_id",session("semestre_id")[0] ?? 1)->count();
             })
             ->description(session("classe")[0] ?? "Nos recours")
             ->color("danger")

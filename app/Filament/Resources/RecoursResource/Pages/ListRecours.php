@@ -20,6 +20,7 @@ use Filament\Resources\Pages\ListRecords;
 use Illuminate\Database\Eloquent\Builder;
 use App\Filament\Resources\RecoursResource;
 use Filament\Resources\Pages\ListRecords\Tab;
+use App\Models\Semestre;
 
 class ListRecours extends ListRecords
 {
@@ -38,49 +39,37 @@ class ListRecours extends ListRecords
             ->icon("heroicon-o-document-text")
             ->hidden(fn():bool => session("classe_id") == null),
             Action::make("classe_choix")
-                ->icon("heroicon-o-building-library")
-                ->hidden(fn():bool => Auth()->user()->hasRole("Etudiant"))
-                ->label("Choix de la Classe")
-                ->modalSubmitActionLabel("Définir")
+                 ->icon("heroicon-o-building-office")
+                 ->hidden(fn():bool => Auth()->user()->hasRole("Etudiant"))
+                 ->label("Choix Classe & Semestre")
+                 ->modalSubmitActionLabel("Définir")
                 ->form([
                     Select::make("section_id")
                     ->label("Section")
+                    ->options(Section::all()->pluck("lib","id"))
                     ->searchable()
                     ->required()
                     ->live()
-                    ->options(Section::query()->pluck("lib","id"))
-                    ->afterStateUpdated(function($state,Set $set){
-                        if($state){
-                            $Section=Section::whereId($state)->get(["lib"]);
-                            $set("section",$Section[0]->lib);
-                        }
-
+                    ->afterStateUpdated(function(Set $set){
+                        $set("jury_id",null);
+                        $set("classe_id",null);
                     }),
-                    Hidden::make("section")
-                    ->disabled()
-                    ->dehydrated(true),
                     Select::make("jury_id")
                     ->label("Jury")
                     ->options(function(Get $get){
-
                         return Jury::where("section_id",$get("section_id"))->pluck("lib","id");
                     })
                     ->searchable()
                     ->required()
                     ->live()
-                    ->afterStateUpdated(function($state,Set $set){
-                        if($state){
-                            $Jury=Jury::whereId($state)->get(["lib"]);
-                            $set("jury",$Jury[0]->lib);
-                        }
+                    ->afterStateUpdated(function(Set $set){
+                        $set("classe_id",null);
                     }),
-                    Hidden::make("jury")
-                    ->disabled()
-                    ->dehydrated(true),
                     Select::make("classe_id")
                     ->label("Classe")
                     ->options(function(Get $get){
-                       return Classe::where("jury_id",$get("jury_id"))->pluck("lib","id");
+                        return Classe::where("jury_id", $get("jury_id"))->pluck("lib","id");
+
                     })
                     ->searchable()
                     ->required()
@@ -90,9 +79,26 @@ class ListRecours extends ListRecords
                             $Classe=Classe::whereId($state)->get(["lib"]);
                             $set("classe",$Classe[0]->lib);
                         }
-
                     }),
                     Hidden::make("classe")
+                    ->disabled()
+                    ->dehydrated(true),
+                    Select::make("semestre_id")
+                    ->label("Semestre")
+                    ->options(Semestre::all()->pluck("lib","id"))
+                    ->searchable()
+                    ->required()
+                    ->live()
+                    ->afterStateUpdated(function($state,Set $set){
+                        if($state){
+                            $Semestre=Semestre::find($state);
+                            $set("semestre",$Semestre->lib);
+                        }else{
+                            $set("jury_id",null);
+                            $set("classe_id",null);
+                        }
+                    }),
+                    Hidden::make("semestre")
                     ->disabled()
                     ->dehydrated(true),
                 ])
@@ -101,34 +107,30 @@ class ListRecours extends ListRecords
                 ->action(function(array $data){
                     if(session('classe_id')==NULL && session('classe')==NULL){
 
-                        session()->push("section_id", $data["section_id"]);
-                        session()->push("section", $data["section"]);
-                        session()->push("jury_id", $data["jury_id"]);
-                        session()->push("jury", $data["jury"]);
                         session()->push("classe_id", $data["classe_id"]);
                         session()->push("classe", $data["classe"]);
+                        session()->push("semestre_id", $data["semestre_id"]);
+                        session()->push("semestre", $data["semestre"]);
 
                     }else{
-                        session()->pull("section_id");
-                        session()->pull("section");
-                        session()->pull("jury_id", $data["jury_id"]);
-                        session()->pull("jury", $data["jury"]);
+
                         session()->pull("classe_id", $data["classe_id"]);
                         session()->pull("classe", $data["classe"]);
-                        session()->push("section_id", $data["section_id"]);
-                        session()->push("section", $data["section"]);
-                        session()->push("jury_id", $data["jury_id"]);
-                        session()->push("jury", $data["jury"]);
+                        session()->pull("semestre_id", $data["semestre_id"]);
+                        session()->pull("semestre", $data["semestre"]);
                         session()->push("classe_id", $data["classe_id"]);
                         session()->push("classe", $data["classe"]);
+                        session()->push("semestre_id", $data["semestre_id"]);
+                        session()->push("semestre", $data["semestre"]);
+
 
                     }
                     Notification::make()
-                    ->title("Jury Choisi :  ".$data['jury']." | ". $data["section"])
+                    ->title("Classe Choisie :  ".$data['classe']." | Semestre : ".$data['semestre'])
                     ->success()
                      ->duration(5000)
                     ->send();
-                     return redirect()->route("filament.admin.resources.recours.index");
+                     return redirect()->route("filament.admin.resources.coupons.index");
 
                 }),
                 Action::make("liaison_choix")
@@ -334,18 +336,27 @@ class ListRecours extends ListRecords
         $Jury=Jury::whereId(session("jury_id")[0] ?? 1)->first();
 
         $Classe=Classe::where("id",session("classe_id")[0] ?? 1)->first();
+        //Récupération de la session
+        $Semestre=Semestre::where("id",session("semestre_id")[0] ?? 1)->first();
 
             return [
-                "$Section->lib | $Jury->lib | $Classe->lib"=>Tab::make()
+                "$Section->lib | $Jury->lib | $Classe->lib | Semestre: $Semestre->lib"=>Tab::make()
                 ->modifyQueryUsing(function(Builder $query)
                 {
                     if(Auth()->user()->hasRole("Etudiant") && session("etudiant_id")==null){
-                        $query->where("classe_id",null);
-                    }else{
-                        $query->where("classe_id",session("classe_id")[0] ?? 1);
+                        $query->where("classe_id",null)
+                               ->where("semestre_id",null);
+                    }elseif(session("semestre_id")==null){
+                        $query->where("classe_id",null)
+                               ->where("semestre_id",null);
+                    }
+                    else{
+                        $query->where("classe_id",session("classe_id")[0] ?? 1)
+                              ->where("semestre_id",session("semestre_id")[0] ?? 1);
                     }
 
-                })->badge("Total recours : ".Recours::where("classe_id",session("classe_id")[0] ?? 1)->count())
+                })->badge("Total recours : ".Recours::where("classe_id",session("classe_id")[0] ?? 1)
+                                                     ->where("semestre_id",session("semestre_id")[0] ?? 1)->count())
                 ->icon("heroicon-o-calendar-days"),
 
 

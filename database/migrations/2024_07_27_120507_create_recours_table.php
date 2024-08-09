@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string("motif");
             $table->json("contenu");
-            $table->unsignedBigInteger("annee_id");
+            $table->unsignedBigInteger("semestre_id");
             $table->unsignedBigInteger("cours_id");
             $table->unsignedBigInteger("etudiant_id");
             $table->unsignedBigInteger("classe_id");

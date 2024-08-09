@@ -36,9 +36,9 @@ class SectionNombreRecoursparClasse extends ChartWidget
         foreach($ClasseId as $index){
 
             $Effectifparclasse[]=Classe::join("recours","recours.classe_id","classes.id")
-                                    ->join("annees","annees.id","recours.annee_id")
+                                    ->join("semestres","semestres.id","recours.semestre_id")
                                     ->join("juries","juries.id","classes.jury_id")
-                                    ->where("annees.id",session('Annee_id')[0] ?? 1)
+                                    ->where("recours.semestre_id",session('semestre_id')[0] ?? 1)
                                     ->where("section_id",session('section_id')[0] ?? 1)
                                     ->where("classes.id",$index)
                                     ->count();
