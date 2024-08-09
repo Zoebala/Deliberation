@@ -1,11 +1,11 @@
-@extends("layout.master")
+@extends("layouts.master")
 @section("contenu")
 
 
         <div class="tableau">
             <hr style="border:1px dashed black">
-            <h3 class="text-center fw-bold">Relevés des matières et des cotes n° /20... </h3>
-            <h6 class="text-center">le chef de section .... soussigné, atteste par la présente que : </h6>
+            <h3 class="text-center fw-bold">Relevés des matières et des cotes n°.... /20... </h3>
+            <h6 class="text-start fst-italic">le chef de section {{ $queries[0]->section }} soussigné, atteste par la présente que : </h6>
             <div>
                 <p>
 

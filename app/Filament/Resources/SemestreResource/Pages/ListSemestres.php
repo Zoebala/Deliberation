@@ -33,6 +33,7 @@ class ListSemestres extends ListRecords
             ->icon("heroicon-o-calendar")
             ->hidden(fn():bool => session("Annee_id") == null),
             Action::make("annee")
+            ->icon("heroicon-o-calendar")
             ->label("Choix année de travail")
             ->form([
                 Select::make("annee")
@@ -155,8 +156,6 @@ class ListSemestres extends ListRecords
                 })->badge(Semestre::query()
                 ->where("annee_id",session("Annee_id") ?? 1)->count())
                 ->icon("heroicon-o-calendar-days"),
-                'Tous'=>Tab::make()
-                ->badge(Semestre::query()->count()),
 
             ];
 

@@ -48,13 +48,14 @@
         <div>
             <div>
                 <img src="{{'images/drapeau.png'}}" alt="drapeau" width="100px" height="100px" class="img-fluid" style="margin-left:5%;">
-                <img src="{{'images/icone.jpg'}}" alt="icone" width="100px" height="100px" class="rounded img-fluid" style="margin-left:60%;">
+                <img src="{{'images/logoist.jpeg'}}" alt="icone" width="100px" height="100px" class="rounded img-fluid" style="margin-left:60%; position:relative; top:11px;">
             </div>
             <div class="text-center">
 
                 <h2>REPUBLIQUE DEMOCRATIQUE DU CONGO</h2>
                 <h3>Ministère de l'Enseignement Supérieur et Universitaire</h3>
-                <h3>A MBANZA-NGUNGU <br> <br> B.P 127</h3>
+                <h3>A MBANZA-NGUNGU</h3>
+                <h3>B.P 94</h3>
             </div>
         </div>
     </header>

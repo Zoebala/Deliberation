@@ -45,7 +45,7 @@ class CouponResource extends Resource
             ->schema([
                 Section::make()
                 ->icon("heroicon-o-clipboard-document-list")
-                ->description("Enregister un coupon")
+                ->description("Enregister une fiche")
                 ->schema([
                         Forms\Components\Select::make('etudiant_id')
                             ->label("Etudiant")
@@ -63,7 +63,7 @@ class CouponResource extends Resource
                                 }
                             }),
                         Repeater::make("elementscoupon")
-                            ->label("Eléments Coupon")
+                            ->label("Eléments Fiche")
                             ->relationship()
                             ->schema([
                                 Select::make("cours_id")

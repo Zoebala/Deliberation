@@ -100,10 +100,7 @@ class MembrejuryResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('jury.lib')
-                    ->label("Jury")
-                    ->searchable()
-                    ->sortable(),
+        
                 Tables\Columns\TextColumn::make('fonction')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('nom')

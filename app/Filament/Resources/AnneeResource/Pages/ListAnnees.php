@@ -27,8 +27,9 @@ class ListAnnees extends ListRecords
             }),
             Actions\CreateAction::make()
             ->label("Ajouter une Année")
-            ->icon("heroicon-o-calendar-days"),
+            ->icon("heroicon-o-calendar"),
             Action::make("annee")
+            ->icon("heroicon-o-calendar")
             ->label("Choix année de travail")
             ->form([
                 Select::make("annee")

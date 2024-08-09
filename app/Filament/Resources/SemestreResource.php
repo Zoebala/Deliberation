@@ -62,9 +62,7 @@ class SemestreResource extends Resource
                 ->label("Semestre")
                 ->sortable()
                 ->searchable(),
-                TextColumn::make("annee.lib")
-                ->label("Année")
-                ->searchable(),
+               
             ])
             ->filters([
                 //
