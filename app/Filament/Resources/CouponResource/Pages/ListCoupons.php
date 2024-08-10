@@ -42,7 +42,7 @@ class ListCoupons extends ListRecords
                     ->hidden(fn():bool => session("classe_id") == null),
                 Action::make("classe_choix")
                  ->icon("heroicon-o-building-office")
-                 ->hidden(fn():bool => Auth()->user()->hasRole("Etudiant"))
+                //  ->hidden(fn():bool => Auth()->user()->hasRole("Etudiant"))
                  ->label("Choix Classe & Semestre")
                  ->modalSubmitActionLabel("Définir")
                 ->form([
@@ -107,7 +107,7 @@ class ListCoupons extends ListRecords
                 ->modalWidth(MaxWidth::Medium)
                 ->modalIcon("heroicon-o-building-office-2")
                 ->action(function(array $data){
-                    if(session('classe_id')==NULL && session('classe')==NULL){
+                    if(session('semestre_id')==NULL){
 
                         session()->push("classe_id", $data["classe_id"]);
                         session()->push("classe", $data["classe"]);
@@ -116,10 +116,10 @@ class ListCoupons extends ListRecords
 
                     }else{
 
-                        session()->pull("classe_id", $data["classe_id"]);
-                        session()->pull("classe", $data["classe"]);
-                        session()->pull("semestre_id", $data["semestre_id"]);
-                        session()->pull("semestre", $data["semestre"]);
+                        session()->pull("classe_id");
+                        session()->pull("classe");
+                        session()->pull("semestre_id");
+                        session()->pull("semestre");
                         session()->push("classe_id", $data["classe_id"]);
                         session()->push("classe", $data["classe"]);
                         session()->push("semestre_id", $data["semestre_id"]);
@@ -353,19 +353,18 @@ class ListCoupons extends ListRecords
                 "$Classe->lib | Semestre : $Semestre->lib | $Annee->lib | Effectif Etudiant : $Effectif"=>Tab::make()
                 ->modifyQueryUsing(function(Builder $query)
                 {
-                    if(Auth()->user()->hasRole("Etudiant") && session("etudiant_id")==null){
+                    if(!Auth()->user()->hasRole("Etudiant") && session("etudiant_id")==null){
                         $query->where("classe_id",null);
                     }elseif(session("semestre_id")==null){
                         $query->where("classe_id",null)
                                ->where("semestre_id",null);
                     }
                     else{
-                        $query->where("classe_id",session("classe_id")[0] ?? 1)
-                             ->where("semestre_id",session("semestre_id")[0] ?? 1);
+                        $query->where("classe_id",session("classe_id")[0] ?? 1);
+                            //  ->where("semestre_id",session("semestre_id")[0] ?? 1);
                     }
 
-                })->badge("Fiche(s) remplie(s) : ".Coupon::where("classe_id",session("classe_id")[0] ?? 1)
-                                                         ->where("semestre_id",session("semestre_id")[0] ?? 1)->count())
+                })->badge("Fiche(s) remplie(s) : ".Coupon::where("classe_id",session("classe_id")[0] ?? 1)->count())
                 ->icon("heroicon-o-calendar-days"),
 
 

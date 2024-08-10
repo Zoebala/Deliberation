@@ -4,12 +4,12 @@
       <div class="section-title">
         <h2>Apropos</h2>
         <h3>Découvrez plus <span>Apropos de nous</span></h3>
-        <p>Voici de manière concise un bref resumé  relatif à l'université de Muanda.</p>
+        <p>Voici de manière concise, un bref resumé  relatif à l'Institut Supérieur Technique de Mbanza-Ngungu</p>
       </div>
 
       <div class="row">
         <div class="col-lg-6" data-aos="fade-right" data-aos-delay="100">
-          <img src="{{ 'images/muanda2.jpg' }}"  class="img-fluid rounded" alt="université de muanda" width="100%">
+          <img src="{{ 'images/apropos.jpeg' }}"  class="img-fluid rounded" alt="université de muanda" width="100%">
         </div>
         <div class="col-lg-6 pt-4 pt-lg-0 content d-flex flex-column justify-content-center" data-aos="fade-up" data-aos-delay="100">
           <h3>Voluptatem dignissimos provident quasi corporis voluptates sit assumenda.</h3>
@@ -43,4 +43,4 @@
 
     </div>
 </section>
-  
+

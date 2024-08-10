@@ -95,7 +95,7 @@
   <script src="js/typed.js"></script>
    <script>
             var typed = new Typed('.typed-words', {
-            strings: ["L'Institut Supérieur Technique","de Mbanza-ngungu","vous souhaite","la bienvenue","dans sa plateforme en ligne"],
+            strings: ["L'Institut Supérieur Technique","de Mbanza-Ngungu","vous souhaite","la bienvenue","dans sa plateforme en ligne"],
             typeSpeed: 80,
             backSpeed: 80,
             backDelay: 4000,

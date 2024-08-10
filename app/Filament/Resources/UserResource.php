@@ -92,7 +92,7 @@ class UserResource extends Resource
                         ]),
                         Step::make("Profil User")
                         ->schema([
-                            FileUpload::make('photo')
+                            FileUpload::make('profile')
                             ->label("Photo")
                             ->required()
                              ->openable()
