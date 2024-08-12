@@ -1,7 +1,10 @@
  <!-- ======= Featured Services Section ======= -->
  <section id="featured-services" class="featured-services">
     <div class="container" data-aos="fade-up">
-
+        <div class="section-title">
+            <h2>Nos Sections</h2>
+            <p class="fst-italic">L'IST de Mbanza-Ngungu, possède les sections que voici :</p>
+          </div>
       <div class="row">
 
       @foreach($Sections as $section)
