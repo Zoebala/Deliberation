@@ -12,31 +12,28 @@
           <img src="{{ 'images/apropos.jpeg' }}"  class="img-fluid rounded" alt="université de muanda" width="100%">
         </div>
         <div class="col-lg-6 pt-4 pt-lg-0 content d-flex flex-column justify-content-center" data-aos="fade-up" data-aos-delay="100">
-          <h3>Voluptatem dignissimos provident quasi corporis voluptates sit assumenda.</h3>
+          <h3>l’IST Ex ISTAC, s’appelait ISTC (Institut Supérieur des Techniques Commerciales).</h3>
           <p class="fst-italic">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore
-            magna aliqua.
+            Sa naissance est liée à l’avènement de l’enquête nationale sur le fonctionnement et la viabilité des Institutions d’Enseignement Supérieur et Universitaire, initié par le Ministre de l’ESU en 2010.
           </p>
           <ul>
             <li>
-              <i class="bx bx-store-alt"></i>
+              <i class="bx bx-map"></i>
               <div>
-                <h5>Ullamco laboris nisi ut aliquip consequat</h5>
-                <p>Magni facilis facilis repellendus cum excepturi quaerat praesentium libre trade</p>
+                <h5>Situation géographique de l’IST/Mbanza-Ngungu</h5>
+                <p>L’IST est situé au numéro 1 de l’Avenue Foyer en face du Stade Papa KITEMOKO</p>
               </div>
             </li>
             <li>
-              <i class="bx bx-images"></i>
+              <i class="bx bx-cog"></i>
               <div>
-                <h5>Magnam soluta odio exercitationem reprehenderi</h5>
-                <p>Quo totam dolorum at pariatur aut distinctio dolorum laudantium illo direna pasata redi</p>
+                <h5>Fonctionnement de l'IST Mbanza-Ngungu</h5>
+                <p>Etant un institut en vacation du soir (de 18h à 20h), </p>
               </div>
             </li>
           </ul>
-          <p>
-            Ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate
-            velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
-            culpa qui officia deserunt mollit anim id est laborum
+          <p  style="text-align:justify;">
+            Il fonctionne au Centre de Promotion Sociale de Mbanza-Ngungu. Son siège administratif est situé sur l’Avenue Mbandaka non loin du Parking de Mbanza-Ngungu, Ville de Mbanza-Ngungu, dans la Province du Kongo Central en République Démocratique du Congo
           </p>
         </div>
       </div>
