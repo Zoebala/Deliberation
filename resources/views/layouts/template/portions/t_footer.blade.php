@@ -9,9 +9,9 @@
           <div class="col-lg-3 col-md-6 footer-contact">
             <h3>IST Mbanza-Ngungu<span>.</span></h3>
             <p>
-              A108 Adam Street <br>
-              New York, NY 535022<br>
-              Ville de Mbanza-ngungu <br><br>
+              N° 1, Av. Foyer Q/Ngungu <br>
+              Ville de Mbanza-Ngungu<br>
+              Province du Kongo-Central <br><br>
               <strong>Phone:</strong> +1 5589 55488 55<br>
               <strong>Email:</strong> istmbanzangungu@example.com<br>
             </p>
