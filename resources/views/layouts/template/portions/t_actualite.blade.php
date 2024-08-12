@@ -1,7 +1,7 @@
 <section id="testimonials" class="testimonials">
     <div class="container" data-aos="zoom-in">
         <div class="section-title">
-            <h2>Nos Nouvelles</h2>
+            <h2><i class="bx bx-receipt"></i> Nos Nouvelles</h2>
 
           </div>
       <div class="testimonials-slider swiper" data-aos="fade-up" data-aos-delay="100">
