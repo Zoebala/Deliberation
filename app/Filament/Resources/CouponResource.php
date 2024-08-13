@@ -14,6 +14,7 @@ use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\TextInput;
+use Filament\Notifications\Notification;
 use Filament\Tables\Actions\ActionGroup;
 use Illuminate\Database\Eloquent\Builder;
 use Filament\Forms\Components\Actions\Action;
@@ -80,20 +81,49 @@ class CouponResource extends Resource
                                      ->placeholder("Ex: 7")
                                      ->numeric()
                                      ->MinValue(1)
-                                     ->MaxValue(10),
+                                     ->MaxValue(10)
+                                     ->live()
+                                     ->afterStateUpdated(function($state,$set){
+                                        if($state > 10){
+                                            $set("tj",null);
+                                            Notification::make()
+                                            ->title("La cote ne peut être au-delà de 10")
+                                            ->warning()
+                                            ->send();
+                                        }
+                                     }),
                                 TextInput::make("examenS1")
                                      ->label("Cote Examen Session 1")
                                      ->placeholder("Ex: 8")
                                      ->required()
                                      ->MinValue(1)
                                      ->MaxValue(10)
-                                     ->numeric(),
+                                     ->numeric()
+                                     ->live()
+                                     ->afterStateUpdated(function($state,$set){
+                                        if($state > 10){
+                                            $set("tj",null);
+                                            Notification::make()
+                                            ->title("La cote ne peut être au-delà de 10")
+                                            ->warning()
+                                            ->send();
+                                        }
+                                     }),
                                 TextInput::make("examenS2")
                                      ->label("Cote Examen Session 2")
                                      ->placeholder("Ex: 5")
                                      ->MinValue(1)
                                      ->MaxValue(10)
-                                     ->numeric(),
+                                     ->numeric()
+                                     ->afterStateUpdated(function($state,$set){
+                                        if($state > 10){
+                                            $set("tj",null);
+                                            Notification::make()
+                                            ->title("La cote ne peut être au-delà de 10")
+                                            ->warning()
+                                            ->send();
+                                        }
+                                     }),
                             ])->columnSpanFull()->columns(4)
                             ->addActionLabel('Ajouter un cours')
                             ->deleteAction( fn (Action $action) => $action->requiresConfirmation(),),
@@ -180,15 +210,21 @@ class CouponResource extends Resource
      public static function getEloquentQuery(): Builder
     {
         if(Auth()->user()->hasRole(["Etudiant"])){
+
+
             //Identification de l'étudiant lié à l'utisateur
-            $Etudiant=Etudiant::where("user_id",Auth()->user()->id)->first();
+            $Etudiant=Etudiant::where("user_id",Auth()->user()->id)
+                                ->where("classe_id",session("classe_id")[0] ?? 1)->first();
+
 
             if($Etudiant){
-
+             
                 return parent::getEloquentQuery()->where("etudiant_id",$Etudiant->id);
+            }else{
+
+                return parent::getEloquentQuery()->where("etudiant_id",null);
             }
 
-            return parent::getEloquentQuery()->where("etudiant_id",null);
         }else{
             return parent::getEloquentQuery();
 

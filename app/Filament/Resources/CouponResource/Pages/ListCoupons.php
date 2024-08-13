@@ -36,6 +36,13 @@ class ListCoupons extends ListRecords
             ->action(function(){
                 return redirect("/");
             }),
+            Actions\Action::make("Palmarès Résultats")
+            ->icon("heroicon-o-document-text")
+            ->label("Palmarès Résultats")
+            ->hidden(fn():bool => !Etudiant::where("user_id",Auth()->user()->id)->exists())
+            ->action(function(){
+               dd("impressio...");
+            }),
             Actions\CreateAction::make()
                     ->label("Enregistrer une fiche")
                     ->icon("heroicon-o-clipboard-document-list")
@@ -139,11 +146,25 @@ class ListCoupons extends ListRecords
                 ->label("Liaison Utilisateur-Etudiant")
                 ->modalSubmitActionLabel("Définir")
                 ->visible(fn():bool =>  Auth()->user()->hasRole("Etudiant"))
-                ->hidden(fn():bool => !session("etudiant_id")==null)
+                ->hidden(fn():bool => Etudiant::where("user_id",Auth()->user()->id)->exists())
                 ->form([
                     Select::make("section_id")
                     ->label("Section")
                     ->options(Section::all()->pluck("lib","id"))
+                    ->searchable()
+                    ->required()
+                    ->afterStateUpdated(function(Set $set){
+                        $set("jury_id",null);
+                        $set("etudiant_id",null);
+                    })
+                    ->live(),
+                    Select::make("jury_id")
+                    ->label("Jury")
+                    ->options(function(Get $get){
+                        if(filled($get("section_id"))){
+                            return Jury::where("section_id",$get("section_id"))->pluck("lib","id");
+                        }
+                    })
                     ->searchable()
                     ->required()
                     ->afterStateUpdated(function(Set $set){
@@ -154,9 +175,8 @@ class ListCoupons extends ListRecords
                     Select::make("classe_id")
                     ->label("Classe")
                     ->options(function(Get $get){
-                        if(filled($get("section_id"))){
-                            $Jury=Jury::where("section_id",$get("section_id"))->first();
-                             return Classe::where("jury_id",$Jury->id)->pluck("lib","id");
+                        if(filled($get("jury_id"))){
+                             return Classe::where("jury_id",$get("jury_id"))->pluck("lib","id");
                         }
                     })
                     ->searchable()
@@ -253,12 +273,25 @@ class ListCoupons extends ListRecords
                         $set("etudiant_id",null);
                     })
                     ->live(),
+                    Select::make("jury_id")
+                    ->label("Jury")
+                    ->options(function(Get $get){
+                        if(filled($get("section_id"))){
+                            return Jury::where("section_id",$get("section_id"))->pluck("lib","id");
+                        }
+                    })
+                    ->searchable()
+                    ->required()
+                    ->afterStateUpdated(function(Set $set){
+                        $set("classe_id",null);
+                        $set("etudiant_id",null);
+                    })
+                    ->live(),
                     Select::make("classe_id")
                     ->label("Classe")
                     ->options(function(Get $get){
-                        if(filled($get("section_id"))){
-                            $Jury=Jury::where("section_id",$get("section_id"))->first();
-                             return Classe::where("jury_id",$Jury->id)->pluck("lib","id");
+                        if(filled($get("jury_id"))){
+                             return Classe::where("jury_id",$get("jury_id"))->pluck("lib","id");
                         }
                     })
                     ->searchable()
@@ -347,24 +380,30 @@ class ListCoupons extends ListRecords
         $Annee=Annee::where("id",$Cl->annee_id)->first();
         //Récupération de la session
         $Semestre=Semestre::where("id",session("semestre_id")[0] ?? 1)->first();
+        if(session("semestre_id") != null && session("classe_id") != null){
+
+            $label="$Classe->lib | Semestre : $Semestre->lib | $Annee->lib | Effectif Etudiant : $Effectif";
+        }else{
+            $label="";
+        }
+
 
 
             return [
-                "$Classe->lib | Semestre : $Semestre->lib | $Annee->lib | Effectif Etudiant : $Effectif"=>Tab::make()
+                "$label"=>Tab::make()
                 ->modifyQueryUsing(function(Builder $query)
                 {
-                    if(!Auth()->user()->hasRole("Etudiant") && session("etudiant_id")==null){
-                        $query->where("classe_id",null);
-                    }elseif(session("semestre_id")==null){
+
+                    if(session("semestre_id")==null){
                         $query->where("classe_id",null)
                                ->where("semestre_id",null);
                     }
                     else{
-                        $query->where("classe_id",session("classe_id")[0] ?? 1);
-                            //  ->where("semestre_id",session("semestre_id")[0] ?? 1);
+                        $query->where("classe_id",session("classe_id")[0] ?? 0)
+                             ->where("semestre_id",session("semestre_id")[0] ?? 0);
                     }
 
-                })->badge("Fiche(s) remplie(s) : ".Coupon::where("classe_id",session("classe_id")[0] ?? 1)->count())
+                })->badge(Auth()->user()->hasRole("Etudiant") ? "Coupon(s) Disponible(s) " : "Fiche(s) Remplie(s) : ".Coupon::where("classe_id",session("classe_id")[0] ?? 0)->count())
                 ->icon("heroicon-o-calendar-days"),
 
 

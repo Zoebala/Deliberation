@@ -2,7 +2,7 @@
     <div class="container" data-aos="fade-up">
 
       <div class="section-title">
-        <h2>Apropos</h2>
+        <h2><i class="bx bx-book"></i> Apropos</h2>
         <h3>Découvrez plus <span>Apropos de nous</span></h3>
         <p>Voici de manière concise, un bref resumé  relatif à l'Institut Supérieur Technique de Mbanza-Ngungu</p>
       </div>

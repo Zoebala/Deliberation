@@ -24,8 +24,8 @@ class CreateCoupon extends CreateRecord
 
     protected function mutateFormDataBeforeCreate(array $data):array
     {
-        
-        $data["semestre"]=(int)sessin("semestre_id")[0] ?? 1;
+
+        $data["semestre_id"]=(int)session("semestre_id")[0] ?? 1;
 
         $data["classe_id"]=(int)session("classe_id")[0] ?? 1;
 

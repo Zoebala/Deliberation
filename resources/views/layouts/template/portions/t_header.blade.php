@@ -10,7 +10,7 @@
   <meta content="" name="keywords">
 
   <!-- Favicons -->
-  <link href="{{ 'images/logomuanda.png' }}" rel="icon">
+  <link href="{{ 'images/logoist.jpeg' }}" rel="icon">
   <link href="template/assets/img/apple-touch-icon.png" rel="apple-touch-icon">
 
   <!-- Google Fonts -->
