@@ -168,7 +168,8 @@ class RecoursResource extends Resource
     {
         if(Auth()->user()->hasRole(["Etudiant"])){
             //Identification de l'étudiant lié à l'utisateur
-            $Etudiant=Etudiant::where("user_id",Auth()->user()->id)->first();
+            $Etudiant=Etudiant::where("user_id",Auth()->user()->id)
+                              ->where("classe_id",session("classe_id")[0] ?? 1)->first();
             if($Etudiant){
 
                 return parent::getEloquentQuery()->where("etudiant_id",$Etudiant->id);

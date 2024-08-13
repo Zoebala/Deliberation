@@ -137,11 +137,25 @@ class ListRecours extends ListRecords
                 ->label("Liaison Utilisateur-Etudiant")
                 ->modalSubmitActionLabel("Définir")
                 ->visible(fn():bool =>  Auth()->user()->hasRole("Etudiant"))
-                ->hidden(fn():bool => !session("etudiant_id")==null)
+                ->hidden(fn():bool => Etudiant::where("user_id",Auth()->user()->id)->exists())
                 ->form([
                     Select::make("section_id")
                     ->label("Section")
                     ->options(Section::all()->pluck("lib","id"))
+                    ->searchable()
+                    ->required()
+                    ->afterStateUpdated(function(Set $set){
+                        $set("jury_id",null);
+                        $set("etudiant_id",null);
+                    })
+                    ->live(),
+                    Select::make("jury_id")
+                    ->label("Jury")
+                    ->options(function(Get $get){
+                        if(filled($get("section_id"))){
+                            return Jury::where("section_id",$get("section_id"))->pluck("lib","id");
+                        }
+                    })
                     ->searchable()
                     ->required()
                     ->afterStateUpdated(function(Set $set){
@@ -152,9 +166,8 @@ class ListRecours extends ListRecords
                     Select::make("classe_id")
                     ->label("Classe")
                     ->options(function(Get $get){
-                        if(filled($get("section_id"))){
-                            $Jury=Jury::where("section_id",$get("section_id"))->first();
-                             return Classe::where("jury_id",$Jury->id)->pluck("lib","id");
+                        if(filled($get("jury_id"))){
+                             return Classe::where("jury_id",$get("jury_id"))->pluck("lib","id");
                         }
                     })
                     ->searchable()
@@ -249,12 +262,25 @@ class ListRecours extends ListRecords
                         $set("etudiant_id",null);
                     })
                     ->live(),
+                    Select::make("jury_id")
+                    ->label("Jury")
+                    ->options(function(Get $get){
+                        if(filled($get("section_id"))){
+                            return Jury::where("section_id",$get("section_id"))->pluck("lib","id");
+                        }
+                    })
+                    ->searchable()
+                    ->required()
+                    ->afterStateUpdated(function(Set $set){
+                        $set("classe_id",null);
+                        $set("etudiant_id",null);
+                    })
+                    ->live(),
                     Select::make("classe_id")
                     ->label("Classe")
                     ->options(function(Get $get){
-                        if(filled($get("section_id"))){
-                            $Jury=Jury::where("section_id",$get("section_id"))->first();
-                             return Classe::where("jury_id",$Jury->id)->pluck("lib","id");
+                        if(filled($get("jury_id"))){
+                             return Classe::where("jury_id",$get("jury_id"))->pluck("lib","id");
                         }
                     })
                     ->searchable()
@@ -322,7 +348,7 @@ class ListRecours extends ListRecords
                     ->success()
                      ->duration(5000)
                     ->send();
-                     return redirect()->route("filament.admin.resources.recours.index");
+                     return redirect()->route("filament.admin.resources.coupons.index");
 
                 });
 
@@ -330,6 +356,7 @@ class ListRecours extends ListRecords
 
     public function getTabs():array
     {
+
 
         $Section=Section::where("id",session("section_id")[0] ?? 1)->first();
 
@@ -339,8 +366,15 @@ class ListRecours extends ListRecords
         //Récupération de la session
         $Semestre=Semestre::where("id",session("semestre_id")[0] ?? 1)->first();
 
+        if(session("semestre_id") != null && session("classe_id") != null){
+
+            $label="$Section->lib | $Jury->lib | $Classe->lib | Semestre: $Semestre->lib";
+        }else{
+            $label="";
+        }
+
             return [
-                "$Section->lib | $Jury->lib | $Classe->lib | Semestre: $Semestre->lib"=>Tab::make()
+                "$label"=>Tab::make()
                 ->modifyQueryUsing(function(Builder $query)
                 {
                     if(Auth()->user()->hasRole("Etudiant") && session("etudiant_id")==null){
