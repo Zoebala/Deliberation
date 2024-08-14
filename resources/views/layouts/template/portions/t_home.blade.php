@@ -3,7 +3,7 @@
       <h1 class="text-center"><span class="typed-words fst-italic"></span></h1>
       <h2 class="text-center text-light">Nous sommes  <span class="text-dark">à votre entière</span>  disposition</h2>
       <div class="d-flex offset-5">
-        <a href="#about" class="btn-get-started scrollto fst-italic"><i class="bi bi-play-circle"></i> Explorez notre site</a>
+        <a href="#testimonials" class="btn-get-started scrollto fst-italic"><i class="bi bi-play-circle"></i> Explorez notre site</a>
 
       </div>
     </div>
