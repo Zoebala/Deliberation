@@ -26,6 +26,7 @@
     <!-- End Featured Services Section -->
 
     <!-- ======= About Section ======= -->
+    @include("layouts.template.portions.t_actualite")
     @include("layouts.template.portions.t_apropos")
     @include("layouts.template.portions.t_section")
     <!-- End About Section -->
@@ -47,7 +48,6 @@
     <!-- End Services Section -->
 
     <!-- ======= Testimonials Section ======= -->
-    @include("layouts.template.portions.t_actualite")
     <!-- End Testimonials Section -->
 
     <!-- ======= Portfolio Section ======= -->
