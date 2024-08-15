@@ -113,13 +113,15 @@ class UserResource extends Resource
         return $table
             ->columns([
                 //
-                TextColumn::make('id')
-                    ->label("Identifiant")
-                    ->numeric()
-                    ->hidden(fn():bool => !Auth()->user()->hasRole(["Admin"]))
-                    ->sortable(),
-                Tables\Columns\ImageColumn::make('photo')
-                    ->searchable(),
+                // TextColumn::make('id')
+                //     ->label("Identifiant")
+                //     ->numeric()
+                //     ->hidden(fn():bool => !Auth()->user()->hasRole(["Admin"]))
+                //     ->sortable(),
+                Tables\Columns\ImageColumn::make('profile')
+                    ->label("Photo")
+                    ->searchable()
+                    ->placeholder("Pas de profil"),
                 TextColumn::make('name')
                     ->label("Nom")
                     ->searchable(),

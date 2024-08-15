@@ -30,6 +30,8 @@ class MembrejuryResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-user-group';
     protected static ?string $navigationGroup ="Déliberation Management";
+    protected static ?string $navigationLabel ="Membres Jury";
+    protected static ?string $modelLabel ="Membres Jury";
     protected static ?int $navigationSort = 50;
     public static function getNavigationBadge():string
     {
@@ -100,7 +102,7 @@ class MembrejuryResource extends Resource
     {
         return $table
             ->columns([
-        
+
                 Tables\Columns\TextColumn::make('fonction')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('nom')

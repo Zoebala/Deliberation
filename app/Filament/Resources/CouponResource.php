@@ -33,6 +33,19 @@ class CouponResource extends Resource
     protected static ?int $navigationSort = 90;
     public static function getNavigationBadge():string
     {
+        if(Auth()->user()->hasRole("Etudiant")){
+            $Etudiant=Etudiant::where("user_id",Auth()->user()->id)->first();
+            if($Etudiant){
+
+                return static::getModel()::where("etudiant_id",Auth()->user()->id)
+                                        ->where("semestre_id",session("semestre_id")[0] ?? 1)
+                                        ->where("classe_id",session("classe_id")[0] ?? 1)
+                                        ->count();
+            }else{
+                return 0;
+              }
+
+        }
         return static::getModel()::count();
     }
     public static function getNavigationBadgeColor():string
@@ -181,6 +194,25 @@ class CouponResource extends Resource
                                         }
                                         $classe_id=1;
                                         return redirect()->route("coupon",compact("clef","classe_id"));
+                                   })
+                                   ->hidden(function(Coupon $coupon){
+                                        //récupération nombre de cours par classe
+                                        $NbreCcl=Cours::where("classe_id",session("classe_id")[0] ?? 1)
+                                                        ->where("semestre_id",session("semestre_id")[0] ?? 1)
+                                                        ->count();
+
+                                        //Récupération nombre de cours déjà renseigné sur le coupon
+                                        $NbreCpon=Coupon::join("elementcoupons","elementcoupons.coupon_id","coupons.id")
+                                                        ->where("classe_id",session("classe_id")[0] ?? 1)
+                                                        ->where("semestre_id",session("semestre_id")[0] ?? 1)
+                                                        ->where("coupons.id",$coupon->id)
+                                                        ->count();
+                                       if($NbreCcl==$NbreCpon){
+                                            return false;
+                                       }
+                                        return true;
+
+
                                    }),
                 ])->button()->label("Actions")
             ])
@@ -218,7 +250,7 @@ class CouponResource extends Resource
 
 
             if($Etudiant){
-             
+
                 return parent::getEloquentQuery()->where("etudiant_id",$Etudiant->id);
             }else{
 

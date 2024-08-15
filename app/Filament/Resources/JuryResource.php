@@ -32,6 +32,8 @@ class JuryResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-building-library';
     protected static ?string $navigationGroup ="Déliberation Management";
+    protected static ?string $navigationLabel ="Jury";
+    protected static ?string $modelLabel ="Jury";
     protected static ?int $navigationSort = 40;
     public static function getNavigationBadge():string
     {

@@ -39,9 +39,9 @@ class ListCoupons extends ListRecords
             Actions\Action::make("Palmarès Résultats")
             ->icon("heroicon-o-document-text")
             ->label("Palmarès Résultats")
-            ->hidden(fn():bool => !Etudiant::where("user_id",Auth()->user()->id)->exists())
+            ->hidden(fn():bool => session("semestre_id")==null)
             ->action(function(){
-               dd("impressio...");
+               dd("impression...");
             }),
             Actions\CreateAction::make()
                     ->label("Enregistrer une fiche")
@@ -395,6 +395,7 @@ class ListCoupons extends ListRecords
                 {
 
                     if(session("semestre_id")==null){
+                        // dd("ici...");
                         $query->where("classe_id",null)
                                ->where("semestre_id",null);
                     }
