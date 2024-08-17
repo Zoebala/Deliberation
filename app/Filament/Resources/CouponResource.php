@@ -63,7 +63,17 @@ class CouponResource extends Resource
                 ->schema([
                         Forms\Components\Select::make('etudiant_id')
                             ->label("Etudiant")
-                            ->options(Etudiant::where("classe_id",session("classe_id")[0] ??1)->pluck("nom","id"))
+                            ->options(function(){
+                                //filtre pour les étudiants dont leurs sont fiches ont déjà été remplies
+                                $Coupon_Etudiant=Coupon::get("etudiant_id");
+                                $Clefs=[];
+                                foreach($Coupon_Etudiant as $clef){
+                                    $Clefs[]=$clef->etudiant_id;
+                                }
+                                return Etudiant::where("classe_id",session("classe_id")[0] ??1)
+                                                ->whereNotIn("id",$Clefs)
+                                                ->pluck("nom","id");
+                            })
                             ->preload()
                             ->searchable()
                             ->live()
@@ -171,6 +181,43 @@ class CouponResource extends Resource
                     ->dateTime("d/m/Y à H:i:s")
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: false),
+                Tables\Columns\TextColumn::make('status')
+                    ->label("Statut")
+                    ->default(function($record){
+
+                            //récupération nombre de cours par classe
+                            $NbreCcl=Cours::where("classe_id",session("classe_id")[0] ?? 1)
+                            ->where("semestre_id",session("semestre_id")[0] ?? 1)
+                            ->count();
+
+                            //Récupération nombre de cours déjà renseigné sur le coupon
+                            $NbreCpon=Coupon::join("elementcoupons","elementcoupons.coupon_id","coupons.id")
+                                            ->where("classe_id",session("classe_id")[0] ?? 1)
+                                            ->where("semestre_id",session("semestre_id")[0] ?? 1)
+                                            ->where("coupons.id",$record->id)
+                                            ->count();
+                            if($NbreCcl>$NbreCpon){
+                                return "Non Achevée";
+                            }
+                            return "Achevée";
+                    })->badge()->color(function($record){
+                        //récupération nombre de cours par classe
+                        $NbreCcl=Cours::where("classe_id",session("classe_id")[0] ?? 1)
+                        ->where("semestre_id",session("semestre_id")[0] ?? 1)
+                        ->count();
+
+                        //Récupération nombre de cours déjà renseigné sur le coupon
+                        $NbreCpon=Coupon::join("elementcoupons","elementcoupons.coupon_id","coupons.id")
+                                        ->where("classe_id",session("classe_id")[0] ?? 1)
+                                        ->where("semestre_id",session("semestre_id")[0] ?? 1)
+                                        ->where("coupons.id",$record->id)
+                                        ->count();
+                        if($NbreCcl>$NbreCpon){
+                            return "danger";
+                        }
+                        return "success";
+
+                    }),
                 Tables\Columns\TextColumn::make('updated_at')
                     ->label("Modifié le ")
                     ->dateTime("d/m/Y à H:i:s")

@@ -6,7 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="stylesheet" href="{{'bootstrap5/css/bootstrap.min.css'}}">
     <script src="{{'bootstrap5/js/bootstrap.min.js'}}"></script>
-    <title>{{"Coupon"}}</title>
+    <title>{{"Imprimé"}}</title>
     <style>
 
         table{

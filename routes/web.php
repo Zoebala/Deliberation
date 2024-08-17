@@ -6,6 +6,7 @@ use App\Models\Etudiant;
 use App\Models\Actualite;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CouponController;
+use App\Http\Controllers\PalmaresController;
 
 /*
 |--------------------------------------------------------------------------
@@ -35,3 +36,5 @@ Route::get('/', function () {
 });
 
 Route::get("coupon/{clef}/{classe_id}",[CouponController::class,"imprimer"])->name("coupon");
+
+Route::get("palmares",[PalmaresController::class,"imprimer"])->name("palmares");

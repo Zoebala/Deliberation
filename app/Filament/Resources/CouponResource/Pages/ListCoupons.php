@@ -41,7 +41,7 @@ class ListCoupons extends ListRecords
             ->label("Palmarès Résultats")
             ->hidden(fn():bool => session("semestre_id")==null)
             ->action(function(){
-               dd("impression...");
+               return redirect()->route("palmares");
             }),
             Actions\CreateAction::make()
                     ->label("Enregistrer une fiche")
