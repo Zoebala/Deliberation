@@ -203,11 +203,11 @@ class ListClasses extends ListRecords
     {
 
         $Section=Section::where("id",session("section_id")[0] ?? 1)->first();
-
-        $Jury=Jury::whereId(session("jury_id")[0] ?? 1)->first();
+        $Jury=Jury::where("id",session("jury_id")[0] ?? 1)->first();
+        $libjurie=$Jury->lib ?? "choisir un jury";
 
             return [
-                "$Section->lib | $Jury->lib"=>Tab::make()
+                "$Section->lib | $libjurie"=>Tab::make()
                 ->modifyQueryUsing(function(Builder $query)
                 {
                 $query->where("classes.jury_id",session("jury_id")[0] ?? 1);
@@ -216,8 +216,7 @@ class ListClasses extends ListRecords
                                 ->where("juries.id",session("jury_id")[0] ?? 1)
                                  ->count())
                 ->icon("heroicon-o-calendar-days"),
-                'Toutes'=>Tab::make()
-                ->badge(Classe::query()->count()),
+              
 
             ];
 

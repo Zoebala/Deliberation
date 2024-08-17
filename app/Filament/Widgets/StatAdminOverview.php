@@ -5,6 +5,7 @@ namespace App\Filament\Widgets;
 use App\Models\Jury;
 use App\Models\Recours;
 use App\Models\Section;
+use App\Models\Etudiant;
 use Filament\Widgets\StatsOverviewWidget\Stat;
 use Filament\Widgets\StatsOverviewWidget as BaseWidget;
 
@@ -33,14 +34,25 @@ class StatAdminOverview extends BaseWidget
             ->chart([34,2,5,23])
             ->Icon("heroicon-o-building-library"),
             Stat::make("Recours",function(){
-                if(session("classe_id")){
+                if(Auth()->user()->hasRole("Etudiant")){
+                    $Etudiant=Etudiant::where("user_id",Auth()->user()->id)->first();
 
+                    if($Etudiant){
+
+                        return Recours::where("etudiant_id",Auth()->user()->id)
+                                                ->where("semestre_id",session("semestre_id")[0] ?? 1)
+                                                ->where("classe_id",session("classe_id")[0] ?? 1)
+                                                ->count();
+                    }
+                }
+                if(session("classe_id")){
                     return Recours::where("semestre_id",session("semestre_id")[0] ?? 1)
                                     ->where("classe_id",session("classe_id")[0] ?? 1)->count();
+
                 }
-               return Recours::where("semestre_id",session("semestre_id")[0] ?? 1)->count();
+                return Recours::where("semestre_id",session("semestre_id")[0] ?? 1)->count();
             })
-            ->description(session("classe")[0] ?? "Nos recours")
+            ->description(Etudiant::where("user_id",Auth()->user()->id)->exists() ? "Mes Recours":session("classe")[0] ?? "Nos Recours" )
             ->color("danger")
             ->chart([34,2,5,23])
             ->Icon("heroicon-o-document-text"),
