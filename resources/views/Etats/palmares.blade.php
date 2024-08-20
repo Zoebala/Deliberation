@@ -32,17 +32,22 @@
 
                                                 <tr>
                                                     <th>#</th>
-                                                    <th>Noms</th>
+                                                    <th>Nom</th>
+                                                    <th>Postnom</th>
+                                                    <th>Prénom</th>
                                                     <th>Genre</th>
                                                     <th>Pourcentage</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
+                                                <?php $i=1; ?>
                                                 @foreach ($queries as $item)
                                                 @if ((($item->coteObtenue*100)/$item->total)<=100 && (($item->coteObtenue*100)/$item->total)>=90 )
                                                     <tr>
-                                                        <td>#</td>
-                                                        <td>{{ $item->nom." ".$item->postnom." ".$item->prenom }}</td>
+                                                        <td>{{ $i++; }}</td>
+                                                        <td>{{ $item->nom }}</td>
+                                                        <td>{{ $item->postnom }}</td>
+                                                        <td>{{ $item->prenom }}</td>
                                                         <td>{{ $item->genre }}</td>
                                                         <td>{{ ($item->coteObtenue*100)/$item->total }}</td>
                                                     </tr>
@@ -71,22 +76,27 @@
 
                                                 <tr>
                                                     <th>#</th>
-                                                    <th>Noms</th>
+                                                    <th>Nom</th>
+                                                    <th>Postnom</th>
+                                                    <th>Prénom</th>
                                                     <th>Genre</th>
                                                     <th>Pourcentage</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                @foreach ($queries as $item)
+                                                <?php $i=1; ?>
+                                              @foreach ($queries as $item)
                                                 @if ((($item->coteObtenue*100)/$item->total)<90 && (($item->coteObtenue*100)/$item->total)>=80 )
                                                     <tr>
-                                                        <td>#</td>
-                                                        <td>{{ $item->nom." ".$item->postnom." ".$item->prenom }}</td>
+                                                        <td>{{ $i++; }}</td>
+                                                        <td>{{ $item->nom }}</td>
+                                                        <td>{{ $item->postnom }}</td>
+                                                        <td>{{ $item->prenom }}</td>
                                                         <td>{{ $item->genre }}</td>
-                                                        <td>{{ ($item->coteObtenue*100)/$item->total }}</td>
+                                                        <td>{{ number_format(($item->coteObtenue*100)/$item->total,2,",",",") }}</td>
                                                     </tr>
                                                 @endif
-                                                @endforeach
+                                             @endforeach
                                            </tbody>
                                         </table>
                                     </li>
@@ -110,19 +120,24 @@
 
                                                 <tr>
                                                     <th>#</th>
-                                                    <th>Noms</th>
+                                                    <th>Nom</th>
+                                                    <th>Postnom</th>
+                                                    <th>Prénom</th>
                                                     <th>Genre</th>
                                                     <th>Pourcentage</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
+                                                <?php $i=1; ?>
                                                 @foreach ($queries as $item)
                                                     @if ((($item->coteObtenue*100)/$item->total)<80 && (($item->coteObtenue*100)/$item->total)>=70 )
                                                         <tr>
-                                                            <td>#</td>
-                                                            <td>{{ $item->nom." ".$item->postnom." ".$item->prenom }}</td>
+                                                            <td>{{ $i++; }}</td>
+                                                            <td>{{ $item->nom }}</td>
+                                                            <td>{{ $item->postnom}}</td>
+                                                            <td>{{ $item->prenom }}</td>
                                                             <td>{{ $item->genre }}</td>
-                                                            <td>{{ ($item->coteObtenue*100)/$item->total }}</td>
+                                                            <td>{{ number_format(($item->coteObtenue*100)/$item->total,2,",",",") }}</td>
                                                         </tr>
                                                     @endif
                                                 @endforeach
@@ -148,19 +163,24 @@
 
                                                 <tr>
                                                     <th>#</th>
-                                                    <th>Noms</th>
+                                                    <th>Nom</th>
+                                                    <th>Postnom</th>
+                                                    <th>Prénom</th>
                                                     <th>Genre</th>
                                                     <th>Pourcentage</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
+                                                <?php $i=1; ?>
                                                 @foreach ($queries as $item)
                                                     @if ((($item->coteObtenue*100)/$item->total)<70 && (($item->coteObtenue*100)/$item->total)>=50 )
                                                         <tr>
-                                                            <td>#</td>
-                                                            <td>{{ $item->nom." ".$item->postnom." ".$item->prenom }}</td>
+                                                            <td>{{ $i++; }}</td>
+                                                            <td>{{ $item->nom }}</td>
+                                                            <td>{{ $item->postnom }}</td>
+                                                            <td>{{ $item->prenom }}</td>
                                                             <td>{{ $item->genre }}</td>
-                                                            <td>{{ ($item->coteObtenue*100)/$item->total }}</td>
+                                                            <td>{{ number_format(($item->coteObtenue*100)/$item->total,2,",",",") }}</td>
                                                         </tr>
                                                     @endif
                                                 @endforeach
@@ -185,17 +205,22 @@
 
                                                 <tr>
                                                     <th>#</th>
-                                                    <th>Noms</th>
+                                                    <th>Nom</th>
+                                                    <th>Postnom</th>
+                                                    <th>Prénom</th>
                                                     <th>Genre</th>
                                                     <th>Pourcentage</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
+                                                <?php $i=1; ?>
                                                 @foreach ($queries as $item)
                                                     @if ((($item->coteObtenue*100)/$item->total)<50 && (($item->coteObtenue*100)/$item->total)>=40 )
                                                         <tr>
-                                                            <td>#</td>
-                                                            <td>{{ $item->nom." ".$item->postnom." ".$item->prenom }}</td>
+                                                            <td>{{ $i++; }}</td>
+                                                            <td>{{ $item->nom}}</td>
+                                                            <td>{{ $item->postnom }}</td>
+                                                            <td>{{ $item->prenom }}</td>
                                                             <td>{{ $item->genre }}</td>
                                                             <td>{{ ($item->coteObtenue*100)/$item->total }}</td>
                                                         </tr>
@@ -215,7 +240,42 @@
                     </li>
                     <li><h3>Sont assimilés aux ajournés</h3>
                         <ul>
-                            <li>toto</li>
+
+                                @if (count($AAA)>1)
+                                    <li>
+                                        <table>
+                                            <thead>
+
+                                                <tr>
+                                                    <th>#</th>
+                                                    <th>Nom</th>
+                                                    <th>Postnom</th>
+                                                    <th>Prénom</th>
+                                                    <th>Genre</th>
+                                                    {{-- <th>Pourcentage</th> --}}
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @foreach ($AAA as $item)
+
+                                                        <tr>
+                                                            <td>{{ $loop->index+1 }}</td>
+                                                            <td>{{ $item->nom}}</td>
+                                                            <td>{{ $item->postnom }}</td>
+                                                            <td>{{ $item->prenom }}</td>
+                                                            <td>{{ $item->genre }}</td>
+                                                            {{-- <td></td> --}}
+                                                        </tr>
+
+                                                @endforeach
+                                        </tbody>
+                                        </table>
+                                    </li>
+                                @else
+                                    <li class="mb-2 fw-bold">Néant</li>
+
+                                @endif
+
                         </ul>
                     </li>
                     <li><h3>Sont non admis à la même filière</h3>
@@ -228,7 +288,9 @@
 
                                                 <tr>
                                                     <th>#</th>
-                                                    <th>Noms</th>
+                                                    <th>Nom</th>
+                                                    <th>Postnom</th>
+                                                    <th>Prénom</th>
                                                     <th>Genre</th>
                                                     <th>Pourcentage</th>
                                                 </tr>
@@ -238,7 +300,9 @@
                                                     @if ((($item->coteObtenue*100)/$item->total)<40 )
                                                         <tr>
                                                             <td>#</td>
-                                                            <td>{{ $item->nom." ".$item->postnom." ".$item->prenom }}</td>
+                                                            <td>{{ $item->nom}}</td>
+                                                            <td>{{ $item->postnom }}</td>
+                                                            <td>{{ $item->prenom }}</td>
                                                             <td>{{ $item->genre }}</td>
                                                             <td>{{ ($item->coteObtenue*100)/$item->total }}</td>
                                                         </tr>

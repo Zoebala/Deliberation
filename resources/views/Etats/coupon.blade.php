@@ -51,11 +51,11 @@
                             <td colspan="3" class="text-end">Total</td>
                             <td class="text-end">{{ $total }}</td>
                             <td class="text-end">{{ $totalobtenue }}</td>
-                            <td class="text-start">{{ number_format($pourcent,2,',','');  }}</td>
+                            <td class="text-start">{{ number_format($pourcent,2,',',',');  }}</td>
                         </tr>
                         <tr>
                             <td colspan="3" class="text-end">Pourcentage</td>
-                            <td colspan="3" class="text-center">{{ sprintf("%.2f",$pourcent);  }}</td>
+                            <td colspan="3" class="text-center">{{ number_format($pourcent,2,',',',');  }}</td>
 
                         </tr>
                         <tr>

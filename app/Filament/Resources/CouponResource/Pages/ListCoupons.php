@@ -4,6 +4,7 @@ namespace App\Filament\Resources\CouponResource\Pages;
 
 use App\Models\Jury;
 use App\Models\Annee;
+use App\Models\Cours;
 use Filament\Actions;
 use App\Models\Classe;
 use App\Models\Coupon;
@@ -40,6 +41,36 @@ class ListCoupons extends ListRecords
             ->icon("heroicon-o-document-text")
             ->label("Palmarès Résultats")
             ->hidden(fn():bool => session("semestre_id")==null)
+            // ->visible(function(){
+            //     //récupération Effectif Etudiant
+            //     $EffectifEtudiant=Etudiant::where("classe_id",session("classe_id")[0] ?? 1)
+            //                      ->count();
+
+            //     //Récupération nombre de coupon
+            //     $NbreCpon=Coupon::where("classe_id",session("classe_id")[0] ?? 1)
+            //                     ->where("semestre_id",session("semestre_id")[0] ?? 1)
+            //                     ->count();
+
+            //     //récupération nombre de cours par classe
+            //     $NbreCcl=Cours::where("classe_id",session("classe_id")[0] ?? 1)
+            //     ->where("semestre_id",session("semestre_id")[0] ?? 1)
+            //     ->count();
+
+            //     //Récupération nombre de cours déjà renseigné sur le coupon par etudiant
+            //     $NbreCoursparCoupon=Coupon::join("elementcoupons","elementcoupons.coupon_id","coupons.id")
+            //                                 ->where("classe_id",session("classe_id")[0] ?? 1)
+            //                                 ->where("semestre_id",session("semestre_id")[0] ?? 1)
+            //                                 ->get();
+
+            //     dd($NbreCoursparCoupon);
+            //     foreach($NbreCoursparCoupon as $Ncpc){
+
+            //         if($EffectifEtudiant>$NbreCpon && count($Ncpc) <  $NbreCcl){
+            //             return false;
+            //         }
+            //         return true;
+            //     }
+            // })
             ->action(function(){
                return redirect()->route("palmares");
             }),

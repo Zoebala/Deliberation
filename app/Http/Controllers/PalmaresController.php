@@ -34,15 +34,22 @@ class PalmaresController extends Controller
                             WHERE Cpon.classe_id=$classe_id AND C.semestre_id=$semestre_id
                             Group by nom,postnom,prenom,chef_section,grade,genre,An.lib,Sec.lib
                             Having total=$max");
-        dd($queries);
+        // dd($queries);
+        //les assimilés aux ajournés
+        $AAA=DB::select("SELECT nom,postnom,prenom,genre,etudiant_id
+                            FROM etudiants as Etud
+                            LEFT JOIN coupons Cpon ON Cpon.etudiant_id=Etud.id
+                            JOIN classes as Cl ON Cl.id=Etud.classe_id
+                            WHERE Cl.id=$classe_id AND semestre_id IS NULL");
 
-
+        // dd($AAA);
 
         if(count($queries) > 0){
             $data=[
                 // "title" => 'Etudiants de '.$queries[0]->classe." - ".$queries[0]->Annee,
                 "date" => date("d/m/Y"),
                 "queries"=> $queries,
+                "AAA"=>$AAA,
             ];
 
             $pdf = Pdf::loadView('Etats/palmares',$data);

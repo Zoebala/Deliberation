@@ -68,7 +68,7 @@ class JuryResource extends Resource
                         if(filled($get("section_id")) && filled($get("lib"))){
                             $rep=Jury::whereSection_id($get("section_id"))
                                     ->whereLib($get("lib"))
-                                    ->Where("Annee_id",session("Annee_id")[0])
+                                    ->Where("Annee_id",session("Annee_id")[0] ?? 1)
                                     ->exists();
                             if($rep){
                                 $set("lib",null);
