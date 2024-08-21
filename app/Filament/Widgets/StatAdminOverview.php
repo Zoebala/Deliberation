@@ -43,6 +43,8 @@ class StatAdminOverview extends BaseWidget
                                                 ->where("semestre_id",session("semestre_id")[0] ?? 1)
                                                 ->where("classe_id",session("classe_id")[0] ?? 1)
                                                 ->count();
+                    }else{
+                        return 0;
                     }
                 }
                 if(session("classe_id")){
@@ -52,7 +54,7 @@ class StatAdminOverview extends BaseWidget
                 }
                 return Recours::where("semestre_id",session("semestre_id")[0] ?? 1)->count();
             })
-            ->description(Etudiant::where("user_id",Auth()->user()->id)->exists() ? "Mes Recours":session("classe")[0] ?? "Nos Recours" )
+            ->description(Etudiant::where("user_id",Auth()->user()->id)->exists() ? "Mes Recours":session("classe")[0] ?? "Recours" )
             ->color("danger")
             ->chart([34,2,5,23])
             ->Icon("heroicon-o-document-text"),
