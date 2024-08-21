@@ -19,6 +19,21 @@ class PalmaresController extends Controller
                             FROM cours
                             Where classe_id=$classe_id AND semestre_id=$semestre_id");
         $max=$maxima[0]->maxima;
+
+        $queries=DB::select("SELECT nom,postnom,prenom,genre,Sem.lib as semestre,chef_section as chsection,grade as grade,
+                sum(C.ponderation*(tj+examenS1)) as coteObtenue,sum(C.ponderation*20) as total,An.lib as annee,Sec.lib as section
+                            FROM cours as C
+                            JOIN semestres as Sem ON Sem.id=C.semestre_id
+                            JOIN elementcoupons as Elcp ON Elcp.cours_id=C.id
+                            JOIN coupons Cpon ON Elcp.coupon_id=Cpon.id
+                            JOIN etudiants as Etud ON Etud.id=Cpon.etudiant_id
+                            JOIN classes as Cl ON Cl.id=Etud.classe_id
+                            JOIN juries as J ON J.id=Cl.jury_id
+                            JOIN sections as Sec ON Sec.id=J.section_id
+                            JOIN annees as An ON An.id=J.annee_id
+                            WHERE Cpon.classe_id=$classe_id AND C.semestre_id=$semestre_id
+                            Group by nom,postnom,prenom,chef_section,grade,genre,An.lib,Sec.lib
+                            Having total=$max");
         //les étudiants ayant suivis tous les cours et ayant obtenu la plus grande distinction
         $PGDS=DB::select("SELECT nom,postnom,prenom,genre,Sem.lib as semestre,chef_section as chsection,grade as grade,
                 sum(C.ponderation*(tj+examenS1)) as coteObtenue,sum(C.ponderation*20) as total,An.lib as annee,Sec.lib as section
@@ -83,6 +98,7 @@ class PalmaresController extends Controller
                             Group by nom,postnom,prenom,chef_section,grade,genre,An.lib,Sec.lib
                             Having total=$max AND (coteObtenue*100)/total BETWEEN 50 AND 69");
 
+
         //les étudiants ayant suivis tous les cours et ayant obtenu un ajournement
         $AS=DB::select("SELECT nom,postnom,prenom,genre,Sem.lib as semestre,chef_section as chsection,grade as grade,
                 sum(C.ponderation*(tj+examenS1)) as coteObtenue,sum(C.ponderation*20) as total,An.lib as annee,Sec.lib as section
@@ -97,7 +113,7 @@ class PalmaresController extends Controller
                             JOIN annees as An ON An.id=J.annee_id
                             WHERE Cpon.classe_id=$classe_id AND C.semestre_id=$semestre_id
                             Group by nom,postnom,prenom,chef_section,grade,genre,An.lib,Sec.lib
-                            Having total=$max AND (coteObtenue*100)/total BETWEEN 40 AND 59");
+                            Having total=$max AND (coteObtenue*100)/total BETWEEN 40 AND 49");
 
         //les étudiants ayant suivis tous les cours et ayant obtenu la mention NAF
         $NAFS=DB::select("SELECT nom,postnom,prenom,genre,Sem.lib as semestre,chef_section as chsection,grade as grade,
@@ -116,11 +132,26 @@ class PalmaresController extends Controller
                             Having total=$max AND (coteObtenue*100)/total BETWEEN 1 AND 39");
 
         //les assimilés aux ajournés
-        $AAA=DB::select("SELECT nom,postnom,prenom,genre,etudiant_id
-                            FROM etudiants as Etud
-                            LEFT JOIN coupons Cpon ON Cpon.etudiant_id=Etud.id
+        $AAA=DB::select("SELECT nom,postnom,prenom,genre,Sem.lib as semestre,chef_section as chsection,grade as grade,
+                sum(C.ponderation*(tj+examenS1)) as coteObtenue,sum(C.ponderation*20) as total,An.lib as annee,Sec.lib as section
+                            FROM cours as C
+                            JOIN semestres as Sem ON Sem.id=C.semestre_id
+                            JOIN elementcoupons as Elcp ON Elcp.cours_id=C.id
+                            JOIN coupons Cpon ON Elcp.coupon_id=Cpon.id
+                            JOIN etudiants as Etud ON Etud.id=Cpon.etudiant_id
                             JOIN classes as Cl ON Cl.id=Etud.classe_id
-                            WHERE Cl.id=$classe_id AND semestre_id IS NULL");
+                            JOIN juries as J ON J.id=Cl.jury_id
+                            JOIN sections as Sec ON Sec.id=J.section_id
+                            JOIN annees as An ON An.id=J.annee_id
+                            WHERE Cpon.classe_id=$classe_id AND C.semestre_id=$semestre_id
+                            Group by nom,postnom,prenom,chef_section,grade,genre,An.lib,Sec.lib
+                            Having total < $max");
+
+        // $AAA=DB::select("SELECT nom,postnom,prenom,genre,etudiant_id
+        //                     FROM etudiants as Etud
+        //                     LEFT JOIN coupons Cpon ON Cpon.etudiant_id=Etud.id
+        //                     JOIN classes as Cl ON Cl.id=Etud.classe_id
+        //                     WHERE Cl.id=$classe_id AND semestre_id IS NULL");
 
         // dd($AAA);
 
@@ -128,7 +159,13 @@ class PalmaresController extends Controller
             $data=[
                 // "title" => 'Etudiants de '.$queries[0]->classe." - ".$queries[0]->Annee,
                 "date" => date("d/m/Y"),
-                "PGD"=> $PGD,
+                "queries" =>$queries,
+                "PGDS"=> $PGDS,
+                "GDS"=> $GDS,
+                "DS"=> $DS,
+                "SS"=> $SS,
+                "AS"=> $AS,
+                "NAFS"=> $NAFS,
                 "AAA"=>$AAA,
             ];
 

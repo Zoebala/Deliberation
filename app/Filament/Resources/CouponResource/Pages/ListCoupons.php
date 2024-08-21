@@ -40,37 +40,25 @@ class ListCoupons extends ListRecords
             Actions\Action::make("Palmarès Résultats")
             ->icon("heroicon-o-document-text")
             ->label("Palmarès Résultats")
-            ->hidden(fn():bool => session("semestre_id")==null)
-            // ->visible(function(){
-            //     //récupération Effectif Etudiant
-            //     $EffectifEtudiant=Etudiant::where("classe_id",session("classe_id")[0] ?? 1)
-            //                      ->count();
+            // ->hidden(fn():bool => session("semestre_id")==null)
+            ->visible(function(){
 
-            //     //Récupération nombre de coupon
-            //     $NbreCpon=Coupon::where("classe_id",session("classe_id")[0] ?? 1)
-            //                     ->where("semestre_id",session("semestre_id")[0] ?? 1)
-            //                     ->count();
 
-            //     //récupération nombre de cours par classe
-            //     $NbreCcl=Cours::where("classe_id",session("classe_id")[0] ?? 1)
-            //     ->where("semestre_id",session("semestre_id")[0] ?? 1)
-            //     ->count();
+                //Récupération nombre de coupon
+                $NbreCpon=Coupon::where("classe_id",session("classe_id")[0] ?? 1)
+                                ->where("semestre_id",session("semestre_id")[0] ?? 1)
+                                ->count();
+                //Récupération de l'effectif pour une classe choisie
+                 $Effectif=Etudiant::where("classe_id",session("classe_id")[0] ?? 1)->count();
 
-            //     //Récupération nombre de cours déjà renseigné sur le coupon par etudiant
-            //     $NbreCoursparCoupon=Coupon::join("elementcoupons","elementcoupons.coupon_id","coupons.id")
-            //                                 ->where("classe_id",session("classe_id")[0] ?? 1)
-            //                                 ->where("semestre_id",session("semestre_id")[0] ?? 1)
-            //                                 ->get();
 
-            //     dd($NbreCoursparCoupon);
-            //     foreach($NbreCoursparCoupon as $Ncpc){
 
-            //         if($EffectifEtudiant>$NbreCpon && count($Ncpc) <  $NbreCcl){
-            //             return false;
-            //         }
-            //         return true;
-            //     }
-            // })
+                    if($Effectif == $NbreCpon){
+                        return true;
+                    }
+                    return false;
+
+            })
             ->action(function(){
                return redirect()->route("palmares");
             }),
