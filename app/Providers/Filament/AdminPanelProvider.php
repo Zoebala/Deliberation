@@ -62,6 +62,7 @@ class AdminPanelProvider extends PanelProvider
             ->renderHook(
                 PanelsRenderHook::AUTH_LOGIN_FORM_AFTER,
                 fn():string =>Blade::render("<a href='/' style='color:#fbbf24; text-align:center; font-weight:bold;'>Accueil ?</a>"),
+               
             )
             ->authMiddleware([
                 Authenticate::class,

@@ -35,6 +35,7 @@ class ListMembrejuries extends ListRecords
             ->icon("heroicon-o-user-plus")
             ->hidden(fn():bool => session("section_id") == null),
             Action::make("jury_choice")
+            ->slideOver()
             ->icon("heroicon-o-building-library")
             ->label("Choix du jury")
             ->modalSubmitActionLabel("Définir")
@@ -120,6 +121,7 @@ class ListMembrejuries extends ListRecords
     {
 
         return Action::make("Section")
+                ->slideOver()
                 ->modalHeading("Choix du jury")
                 ->modalSubmitActionLabel("Définir")
                 ->visible(fn():bool => session("jury_id") == null)
@@ -206,9 +208,10 @@ class ListMembrejuries extends ListRecords
         $Section=Section::where("id",session("section_id")[0] ?? 1)->first();
 
         $Jury=Jury::whereId(session("jury_id")[0] ?? 1)->first();
+        $libjurie=$Jury->lib ?? "choisir un jury";
 
             return [
-                "$Section->lib | $Jury->lib"=>Tab::make()
+                "$Section->lib |  $libjurie"=>Tab::make()
                 ->modifyQueryUsing(function(Builder $query)
                 {
                 $query->join("juries","juries.id","membrejuries.jury_id")

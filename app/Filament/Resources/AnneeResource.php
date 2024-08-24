@@ -83,7 +83,7 @@ class AnneeResource extends Resource
             ->actions([
                 ActionGroup::make([
 
-                    Tables\Actions\EditAction::make(),
+                    Tables\Actions\EditAction::make()->slideOver(),
                     Tables\Actions\DeleteAction::make(),
                 ])->button()->label("Actions"),
             ])
