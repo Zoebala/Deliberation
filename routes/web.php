@@ -35,7 +35,8 @@ Route::get('/', function () {
     return view('welcome',compact('Sections',"Actualites"));
 });
 
-Route::get("coupon/{clef}/{classe_id}",[CouponController::class,"imprimer"])->name("coupon");
+Route::get("coupon_semestre/{clef}/{classe_id}",[CouponController::class,"imprimer"])->name("coupon_semestre");
+Route::get("coupon_annuel/{clef}/{classe_id}",[CouponController::class,"imprimerAnnuel"])->name("coupon_annuel");
 
 Route::get("palmares",[PalmaresController::class,"imprimer"])->name("palmares");
 Route::get("palmares_annuel",[PalmaresController::class,"imprimerAnnuel"])->name("palmares_annuel");

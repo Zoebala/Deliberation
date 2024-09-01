@@ -7,6 +7,7 @@ use Filament\Tables;
 use App\Models\Cours;
 use App\Models\Coupon;
 use App\Models\Etudiant;
+use App\Models\Semestre;
 use Filament\Forms\Form;
 use Filament\Tables\Table;
 use Filament\Resources\Resource;
@@ -232,35 +233,76 @@ class CouponResource extends Resource
 
                     Tables\Actions\EditAction::make(),
                     Tables\Actions\DeleteAction::make(),
-                    Tables\Actions\Action::make("Imprimer Relevé")
-                                   ->icon("heroicon-o-document-text")
-                                   ->action(function(Coupon $clef){
-                                        if(session("classe_id")){
-                                            $classe_id=(int)session("classe_id")[0] ?? 1;
-                                            return redirect()->route("coupon",compact("clef","classe_id"));
-                                        }
-                                        $classe_id=1;
-                                        return redirect()->route("coupon",compact("clef","classe_id"));
-                                   })
-                                   ->hidden(function(Coupon $coupon){
-                                        //récupération nombre de cours par classe
-                                        $NbreCcl=Cours::where("classe_id",session("classe_id")[0] ?? 1)
-                                                        ->where("semestre_id",session("semestre_id")[0] ?? 1)
-                                                        ->count();
+                    ActionGroup::make([
 
-                                        //Récupération nombre de cours déjà renseigné sur le coupon
-                                        $NbreCpon=Coupon::join("elementcoupons","elementcoupons.coupon_id","coupons.id")
-                                                        ->where("classe_id",session("classe_id")[0] ?? 1)
-                                                        ->where("semestre_id",session("semestre_id")[0] ?? 1)
-                                                        ->where("coupons.id",$coupon->id)
-                                                        ->count();
-                                       if($NbreCcl==$NbreCpon){
-                                            return false;
-                                       }
-                                        return true;
+                        Tables\Actions\Action::make("Imprimer Relevé")
+                                       ->icon("heroicon-o-document-text")
+                                       ->label(function(){
+                                            return session("semestre") ?session("semestre")[0] :"session";
+
+                                       })
+                                       ->action(function(Coupon $clef){
+
+                                            if(session("classe_id")){
+                                                $classe_id=(int)session("classe_id")[0] ?? 1;
+                                                return redirect()->route("coupon_semestre",compact("clef","classe_id"));
+                                            }
+                                            $classe_id=1;
+                                            return redirect()->route("coupon_semestre",compact("clef","classe_id"));
+                                       })
+                                       ->hidden(function(Coupon $coupon){
+                                            //récupération nombre de cours par classe
+                                            $NbreCcl=Cours::where("classe_id",session("classe_id")[0] ?? 1)
+                                                            ->where("semestre_id",session("semestre_id")[0] ?? 1)
+                                                            ->count();
+
+                                            //Récupération nombre de cours déjà renseigné sur le coupon
+                                            $NbreCpon=Coupon::join("elementcoupons","elementcoupons.coupon_id","coupons.id")
+                                                            ->where("classe_id",session("classe_id")[0] ?? 1)
+                                                            ->where("semestre_id",session("semestre_id")[0] ?? 1)
+                                                            ->where("coupons.id",$coupon->id)
+                                                            ->count();
+                                           if($NbreCcl==$NbreCpon){
+                                                return false;
+                                           }
+                                            return true;
 
 
-                                   }),
+                                       }),
+                        Tables\Actions\Action::make("Annuel")
+                                       ->icon("heroicon-o-document-text")
+                                       ->label("Annuel")
+                                       ->action(function(Coupon $clef){
+
+                                            if(session("classe_id")){
+                                                $classe_id=(int)session("classe_id")[0] ?? 1;
+                                                return redirect()->route("coupon_annuel",compact("clef","classe_id"));
+                                            }
+                                            $classe_id=1;
+                                            return redirect()->route("coupon_annuel",compact("clef","classe_id"));
+                                       })->visible(function(){
+                                            $NbSem=Semestre::where("annee_id",session("Annee_id"))->count();
+                                            if($NbSem >= 2)
+                                                    return true;
+                                        })
+                                       ->hidden(function(Coupon $coupon){
+                                            //récupération nombre de cours par classe
+                                            $NbreCcl=Cours::where("classe_id",session("classe_id")[0] ?? 1)
+                                                            ->count();
+
+                                            //Récupération nombre de cours déjà renseigné sur le coupon
+                                            $NbreCpon=Coupon::join("elementcoupons","elementcoupons.coupon_id","coupons.id")
+                                                            ->where("classe_id",session("classe_id")[0] ?? 1)
+                                                            ->where("coupons.id",$coupon->id)
+                                                            ->count();
+                                           if($NbreCcl==$NbreCpon){
+                                                return false;
+                                           }
+                                            return true;
+
+
+                                       }),
+                    ])->label("Imprimer Relevés")->button(),
                 ])->button()->label("Actions")
             ])
             ->bulkActions([
