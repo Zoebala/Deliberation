@@ -40,6 +40,7 @@ class ListEtudiants extends ListRecords
              Action::make("classe_choix")
                 ->icon("heroicon-o-building-office")
                 ->label("Choix de la Classe")
+                ->slideOver()
                 ->modalSubmitActionLabel("Définir")
                 ->form([
                     Select::make("section_id")

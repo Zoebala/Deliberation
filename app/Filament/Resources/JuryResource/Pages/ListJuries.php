@@ -36,6 +36,7 @@ class ListJuries extends ListRecords
             Action::make("annee_choix")
             ->label("Choix Année & Section")
             ->icon("heroicon-o-calendar-days")
+            ->slideOver()
             ->modalSubmitActionLabel("Définir")
             ->form([
                 Select::make("annee")
@@ -116,6 +117,7 @@ class ListJuries extends ListRecords
         return Action::make("Annee")
                 ->modalHeading("Choix Année & Section")
                 ->modalSubmitActionLabel("Définir")
+                ->slideOver()
                 ->visible(fn():bool => session("section_id") == null)
                 ->form([
                     Select::make("annee")

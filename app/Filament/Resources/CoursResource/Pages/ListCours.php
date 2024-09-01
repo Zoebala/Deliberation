@@ -36,6 +36,7 @@ class ListCours extends ListRecords
                 Action::make("Section")
                 ->icon("heroicon-o-building-office")
                 ->label("Choix Classe")
+                ->slideOver()
                 ->modalSubmitActionLabel("Définir")
                 ->form([
                     Select::make("semestre_id")

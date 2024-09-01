@@ -37,6 +37,7 @@ class ListClasses extends ListRecords
              Action::make("Choix Jury")
                 ->modalHeading("Choix du jury")
                 ->icon("heroicon-o-building-library")
+                ->slideOver()
                 ->modalSubmitActionLabel("Définir")
                 ->form([
                     Select::make("section_id")
@@ -121,6 +122,7 @@ class ListClasses extends ListRecords
         return Action::make("Section")
                 ->modalHeading("Choix du jury")
                 ->modalSubmitActionLabel("Définir")
+                ->slideOver()
                 ->visible(fn():bool => session("jury_id") == null)
                 ->form([
                     Select::make("section_id")
@@ -216,7 +218,7 @@ class ListClasses extends ListRecords
                                 ->where("juries.id",session("jury_id")[0] ?? 1)
                                  ->count())
                 ->icon("heroicon-o-calendar-days"),
-              
+
 
             ];
 
