@@ -102,6 +102,7 @@ class ListRecours extends ListRecords
                     ->disabled()
                     ->dehydrated(true),
                 ])
+                ->slideOver()
                 ->modalWidth(MaxWidth::Medium)
                 ->modalIcon("heroicon-o-building-office-2")
                 ->action(function(array $data){
@@ -130,7 +131,7 @@ class ListRecours extends ListRecords
                     ->success()
                      ->duration(5000)
                     ->send();
-                     return redirect()->route("filament.admin.resources.coupons.index");
+                     return redirect()->route("filament.admin.resources.recours.index");
 
                 }),
                 Action::make("liaison_choix")
@@ -249,6 +250,7 @@ class ListRecours extends ListRecords
         return Action::make("liaison")
                 ->modalHeading("Liaison User-Etudiant")
                 ->modalSubmitActionLabel("Définir")
+                ->slideOver()
                 ->visible(fn():bool =>  $Etudiant == null)
                 ->hidden(fn():bool =>  Auth()->user()->hasRole(["Admin","Jury"]))
                 ->form([
@@ -348,7 +350,7 @@ class ListRecours extends ListRecords
                     ->success()
                      ->duration(5000)
                     ->send();
-                     return redirect()->route("filament.admin.resources.coupons.index");
+                     return redirect()->route("filament.admin.resources.recours.index");
 
                 });
 
@@ -361,6 +363,8 @@ class ListRecours extends ListRecords
         $Section=Section::where("id",session("section_id")[0] ?? 1)->first();
 
         $Jury=Jury::whereId(session("jury_id")[0] ?? 1)->first();
+        $libJury= $Jury ? $Jury->lib :"veuillez choisir le jury";
+
 
         $Classe=Classe::where("id",session("classe_id")[0] ?? 1)->first();
         //Récupération de la session
@@ -368,7 +372,7 @@ class ListRecours extends ListRecords
 
         if(session("semestre_id") != null && session("classe_id") != null){
 
-            $label="$Section->lib | $Jury->lib | $Classe->lib | Semestre: $Semestre->lib";
+            $label="$Section->lib | $libJury | $Classe->lib | Semestre: $Semestre->lib";
         }else{
             $label="";
         }

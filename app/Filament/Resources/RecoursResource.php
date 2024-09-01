@@ -63,7 +63,8 @@ class RecoursResource extends Resource
                     ->placeholder(function(){
                         $Classe=Classe::where("id",session("classe_id")[0] ?? 1)->first();
                         $Jury=Jury::where("id",session("jury_id")[0] ?? 1)->first();
-                        return $Jury->lib." | ".$Classe->lib;
+                        $libJury= $Jury ? $Jury->lib :"Veuillez choisir le jury";
+                        return $libJury." | ".$Classe->lib;
                     })
                     ->disabled()
                     ->columnSpanFull(),

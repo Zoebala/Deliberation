@@ -25,6 +25,8 @@ class ActualiteResource extends Resource
     protected static ?string $model = Actualite::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-document-text';
+    protected static ?string $navigationLabel = 'Actualités';
+    protected static ?string $modelLabel = 'Actualités';
     public static function canAccess():bool
     {
         if(!Auth()->user()->hasRole(["Admin"])){

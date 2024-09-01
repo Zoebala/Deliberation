@@ -14,6 +14,7 @@ use Filament\Forms\Set;
 use App\Models\Etudiant;
 use App\Models\Semestre;
 use Filament\Actions\Action;
+use Filament\Actions\ActionGroup;
 use Illuminate\Support\HtmlString;
 use Filament\Support\Enums\MaxWidth;
 use Filament\Forms\Components\Hidden;
@@ -37,37 +38,57 @@ class ListCoupons extends ListRecords
             ->action(function(){
                 return redirect("/");
             }),
-            Actions\Action::make("Palmarès Résultats")
-            ->icon("heroicon-o-document-text")
-            ->label("Palmarès Résultats")
-            // ->hidden(fn():bool => session("semestre_id")==null)
-            ->visible(function(){
+            ActionGroup::make([
 
-
-                //Récupération nombre de coupon
-                $NbreCpon=Coupon::where("classe_id",session("classe_id")[0] ?? 1)
-                                ->where("semestre_id",session("semestre_id")[0] ?? 1)
-                                ->count();
-                //Récupération de l'effectif pour une classe choisie
-                 $Effectif=Etudiant::where("classe_id",session("classe_id")[0] ?? 1)->count();
-
-
-
-                    if($Effectif == $NbreCpon){
-                        return true;
+                Actions\Action::make("Semestriel")
+                ->icon("heroicon-o-document-text")
+                ->label(function(){
+                    if(session("semestre")){
+                        return session("semestre")[0];
+                    }else{
+                        return "Semestriel";
                     }
-                    return false;
+                })
+                // ->hidden(fn():bool => session("semestre_id")==null)
+                ->visible(function(){
 
-            })
-            ->action(function(){
-               return redirect()->route("palmares");
-            }),
+
+                    //Récupération nombre de coupon
+                    $NbreCpon=Coupon::where("classe_id",session("classe_id")[0] ?? 1)
+                                    ->where("semestre_id",session("semestre_id")[0] ?? 1)
+                                    ->count();
+                    //Récupération de l'effectif pour une classe choisie
+                     $Effectif=Etudiant::where("classe_id",session("classe_id")[0] ?? 1)->count();
+
+
+
+                        if($Effectif == $NbreCpon){
+                            return true;
+                        }
+                        return false;
+
+                })
+                ->action(function(){
+                   return redirect()->route("palmares");
+                }),
+                Actions\Action::make("Annuel")
+                ->icon("heroicon-o-calendar")
+                ->visible(function(){
+                    $NbSem=Semestre::where("annee_id",session("Annee_id"))->count();
+                   if($NbSem >= 2)
+                        return true;
+                })
+                ->action(function(){
+                    return redirect()->route("palmares_annuel");
+                }),
+            ])->label("Palmarès Résultats")->button(),
             Actions\CreateAction::make()
                     ->label("Enregistrer une fiche")
                     ->icon("heroicon-o-clipboard-document-list")
                     ->hidden(fn():bool => session("classe_id") == null),
                 Action::make("classe_choix")
                  ->icon("heroicon-o-building-office")
+                 ->slideOver()
                 //  ->hidden(fn():bool => Auth()->user()->hasRole("Etudiant"))
                  ->label("Choix Classe & Semestre")
                  ->modalSubmitActionLabel("Définir")

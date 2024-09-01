@@ -85,6 +85,7 @@ class AnneeResource extends Resource
 
                     Tables\Actions\EditAction::make()->slideOver(),
                     Tables\Actions\DeleteAction::make(),
+                    // Tables\Actions\ViewAction::make(),
                 ])->button()->label("Actions"),
             ])
             ->bulkActions([
@@ -109,4 +110,6 @@ class AnneeResource extends Resource
             'edit' => Pages\EditAnnee::route('/{record}/edit'),
         ];
     }
+
+  
 }

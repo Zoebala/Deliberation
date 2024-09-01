@@ -94,7 +94,7 @@ class UserResource extends Resource
                         ->schema([
                             FileUpload::make('profile')
                             ->label("Photo")
-                            ->required()
+                            // ->required()
                              ->openable()
                             ->downloadable()
                             ->maxSize("2048")

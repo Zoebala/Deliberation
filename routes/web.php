@@ -38,3 +38,4 @@ Route::get('/', function () {
 Route::get("coupon/{clef}/{classe_id}",[CouponController::class,"imprimer"])->name("coupon");
 
 Route::get("palmares",[PalmaresController::class,"imprimer"])->name("palmares");
+Route::get("palmares_annuel",[PalmaresController::class,"imprimerAnnuel"])->name("palmares_annuel");
