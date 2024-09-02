@@ -14,6 +14,7 @@ use Filament\Forms\Set;
 use App\Models\Etudiant;
 use App\Models\Semestre;
 use Filament\Actions\Action;
+use App\Models\Elementcoupon;
 use Filament\Actions\ActionGroup;
 use Illuminate\Support\HtmlString;
 use Filament\Support\Enums\MaxWidth;
@@ -49,7 +50,7 @@ class ListCoupons extends ListRecords
                         return "Semestriel";
                     }
                 })
-                // ->hidden(fn():bool => session("semestre_id")==null)
+                ->hidden(fn():bool => session("semestre_id")==null)
                 ->visible(function(){
 
 
@@ -71,11 +72,30 @@ class ListCoupons extends ListRecords
                 ->action(function(){
                    return redirect()->route("palmares");
                 }),
+
                 Actions\Action::make("Annuel")
                 ->icon("heroicon-o-calendar")
                 ->visible(function(){
-                    $NbSem=Semestre::where("annee_id",session("Annee_id"))->count();
-                   if($NbSem >= 2)
+
+                    //Récupération nombre de semestre
+                    $NbSem=Semestre::where("annee_id",session("Annee_id")[0] ?? 1)->count();
+
+                    //Récupération nombre de cours pour une classe
+                    $NbCours=Cours::join("semestres","semestres.id","cours.semestre_id")
+                                    ->where("classe_id",session("classe_id"))
+                                    ->where("annee_id",session("Annee_id")[0] ?? 1)
+                                    ->count();
+
+                    //Récupération nombre cours semestre pour une année
+                    $NbCoursSemestre=Cours::where("classe_id",session("classe_id"))
+                                          ->where("semestre_id",session("semestre_id")[0])
+                                          ->count();
+
+
+
+                    //on vérifie si le nbre de semestre est au moins 2 et si le nbre de cours pour une classe
+                    //et supérieur au nbre de cours pour un semestre en cours
+                   if($NbSem >= 2 && $NbCours > $NbCoursSemestre)
                         return true;
                 })
                 ->action(function(){
@@ -435,7 +455,7 @@ class ListCoupons extends ListRecords
                 {
 
                     if(session("semestre_id")==null){
-                        // dd("ici...");
+
                         $query->where("classe_id",null)
                                ->where("semestre_id",null);
                     }

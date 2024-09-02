@@ -234,7 +234,6 @@ class CouponResource extends Resource
                     Tables\Actions\EditAction::make(),
                     Tables\Actions\DeleteAction::make(),
                     ActionGroup::make([
-
                         Tables\Actions\Action::make("Imprimer Relevé")
                                        ->icon("heroicon-o-document-text")
                                        ->label(function(){
@@ -281,27 +280,28 @@ class CouponResource extends Resource
                                             $classe_id=1;
                                             return redirect()->route("coupon_annuel",compact("clef","classe_id"));
                                        })->visible(function(){
-                                            $NbSem=Semestre::where("annee_id",session("Annee_id"))->count();
-                                            if($NbSem >= 2)
+
+                                                //Récupération nombre de semestre
+                                                $NbSem=Semestre::where("annee_id",session("Annee_id")[0] ?? 1)->count();
+
+                                                //Récupération nombre de cours pour une classe
+                                                $NbCours=Cours::join("semestres","semestres.id","cours.semestre_id")
+                                                                ->where("classe_id",session("classe_id"))
+                                                                ->where("annee_id",session("Annee_id")[0] ?? 1)
+                                                                ->count();
+
+                                                //Récupération nombre cours semestre pour une année
+                                                $NbCoursSemestre=Cours::where("classe_id",session("classe_id"))
+                                                                    ->where("semestre_id",session("semestre_id")[0])
+                                                                    ->count();
+
+
+
+                                                //on vérifie si le nbre de semestre est au moins 2 et si le nbre de cours pour une classe
+                                                //et supérieur au nbre de cours pour un semestre en cours
+                                            if($NbSem >= 2 && $NbCours > $NbCoursSemestre)
                                                     return true;
-                                        })
-                                       ->hidden(function(Coupon $coupon){
-                                            //récupération nombre de cours par classe
-                                            $NbreCcl=Cours::where("classe_id",session("classe_id")[0] ?? 1)
-                                                            ->count();
-
-                                            //Récupération nombre de cours déjà renseigné sur le coupon
-                                            $NbreCpon=Coupon::join("elementcoupons","elementcoupons.coupon_id","coupons.id")
-                                                            ->where("classe_id",session("classe_id")[0] ?? 1)
-                                                            ->where("coupons.id",$coupon->id)
-                                                            ->count();
-                                           if($NbreCcl==$NbreCpon){
-                                                return false;
-                                           }
-                                            return true;
-
-
-                                       }),
+                                        }),
                     ])->label("Imprimer Relevés")->button(),
                 ])->button()->label("Actions")
             ])

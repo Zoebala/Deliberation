@@ -75,7 +75,8 @@ class ListCours extends ListRecords
                 ->modalWidth(MaxWidth::Medium)
                 ->modalIcon("heroicon-o-building-office-2")
                 ->action(function(array $data){
-                    if(session('section_id')==NULL && session('section')==NULL){
+
+                    if(session('semestre_id')==NULL && session('semestre')==NULL){
 
                         session()->push("semestre_id", $data["semestre_id"]);
                         session()->push("semestre", $data["semestre"]);
@@ -83,10 +84,11 @@ class ListCours extends ListRecords
                         session()->push("classe", $data["classe"]);
 
                     }else{
+
                         session()->pull("semestre_id");
                         session()->pull("semestre");
-                        session()->pull("classe_id", $data["classe_id"]);
-                        session()->pull("classe", $data["classe"]);
+                        session()->pull("classe_id");
+                        session()->pull("classe");
                         session()->push("semestre_id", $data["semestre_id"]);
                         session()->push("semestre", $data["semestre"]);
                         session()->push("classe_id", $data["classe_id"]);
@@ -94,6 +96,7 @@ class ListCours extends ListRecords
 
 
                     }
+
                     Notification::make()
                     ->title("Classe Choisie :  ".$data['classe']." | ". $data["semestre"])
                     ->success()
@@ -110,9 +113,10 @@ class ListCours extends ListRecords
     public function classe():Action
     {
 
-        return Action::make("Section")
+        return Action::make("classe")
                 ->modalHeading("Choix de la Classe")
                 ->modalSubmitActionLabel("Définir")
+                ->slideOver()
                 ->visible(fn():bool => session("classe_id") == null)
                 ->form([
                     Select::make("semestre_id")
@@ -153,6 +157,7 @@ class ListCours extends ListRecords
                 ->modalWidth(MaxWidth::Medium)
                 ->modalIcon("heroicon-o-building-office-2")
                 ->action(function(array $data){
+
                     if(session('classe_id')==NULL && session('classe')==NULL){
 
                         session()->push("semestre_id", $data["semestre_id"]);
@@ -163,8 +168,8 @@ class ListCours extends ListRecords
                     }else{
                         session()->pull("semestre_id");
                         session()->pull("semestre");
-                        session()->pull("classe_id", $data["classe_id"]);
-                        session()->pull("classe", $data["classe"]);
+                        session()->pull("classe_id");
+                        session()->pull("classe");
                         session()->push("semestre_id", $data["semestre_id"]);
                         session()->push("semestre", $data["semestre"]);
                         session()->push("classe_id", $data["classe_id"]);
@@ -189,6 +194,7 @@ class ListCours extends ListRecords
 
         $Semestre=Semestre::where("id",session("semestre_id")[0] ?? 1)->first();
 
+
         $Classe=Classe::whereId(session("classe_id")[0] ?? 1)->first();
 
             return [
@@ -199,15 +205,10 @@ class ListCours extends ListRecords
 
                 })->badge(Cours::join("classes","classes.id","cours.classe_id")
                                 ->where("classes.id",session("classe_id")[0] ?? 1)
+                                ->where("semestre_id",session("semestre_id")[0] ?? 1)
                                  ->count())
                 ->icon("heroicon-o-building-office-2"),
-                'Tous les semestres'=>Tab::make()
-                ->modifyQueryUsing(function(Builder $query)
-                {
-                $query->where("cours.classe_id",session("classe_id")[0] ?? 1);
 
-                })
-                ->badge(Cours::query()->count()),
 
             ];
 
