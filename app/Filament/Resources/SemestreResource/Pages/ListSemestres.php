@@ -34,6 +34,7 @@ class ListSemestres extends ListRecords
             ->hidden(fn():bool => session("Annee_id") == null),
             Action::make("annee")
             ->icon("heroicon-o-calendar")
+            ->slideOver()
             ->label("Choix année de travail")
             ->form([
                 Select::make("annee")
@@ -91,6 +92,7 @@ class ListSemestres extends ListRecords
         return Action::make("Annee")
                 ->modalHeading("Définition de l'année de travail")
                 ->modalSubmitActionLabel("Définir")
+                ->slideOver()
                 ->visible(fn():bool => session("Annee_id") == null)
                 ->form([
                     Select::make("annee")

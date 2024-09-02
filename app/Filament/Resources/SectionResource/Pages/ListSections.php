@@ -33,6 +33,7 @@ class ListSections extends ListRecords
             }),
             Action::make("Section_choix")
                 ->label("Choix Section")
+                ->slideOver()
                 ->icon("heroicon-o-building-office-2")
                 ->modalSubmitActionLabel("Définir")
                 ->form([
@@ -116,6 +117,7 @@ class ListSections extends ListRecords
         return Action::make("Section")
                 ->modalHeading("Choix Section")
                 ->modalSubmitActionLabel("Définir")
+                ->slideOver()
                 ->visible(fn():bool => session("section_id") == null)
                 ->form([
                     Select::make("section_id")
