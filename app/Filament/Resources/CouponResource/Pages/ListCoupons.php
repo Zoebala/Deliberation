@@ -101,7 +101,27 @@ class ListCoupons extends ListRecords
                 ->action(function(){
                     return redirect()->route("palmares_annuel");
                 }),
-            ])->label("Palmarès Résultats")->button(),
+            ])->label("Palmarès Résultats")->button()
+            ->visible(function(){
+
+
+                //Récupération nombre de coupon
+                $NbreCpon=Coupon::where("classe_id",session("classe_id")[0] ?? 1)
+                                ->where("semestre_id",session("semestre_id")[0] ?? 1)
+                                ->count();
+                //Récupération de l'effectif pour une classe choisie
+                 $Effectif=Etudiant::where("classe_id",session("classe_id")[0] ?? 1)->count();
+
+
+
+                    if($Effectif == $NbreCpon){
+                        return true;
+                    }
+                    return false;
+
+            }),
+
+
             Actions\CreateAction::make()
                     ->label("Enregistrer une fiche")
                     ->icon("heroicon-o-clipboard-document-list")
@@ -202,6 +222,7 @@ class ListCoupons extends ListRecords
                      return redirect()->route("filament.admin.resources.coupons.index");
 
                 }),
+
                 Action::make("liaison_choix")
                 ->label("Liaison Utilisateur-Etudiant")
                 ->modalSubmitActionLabel("Définir")
