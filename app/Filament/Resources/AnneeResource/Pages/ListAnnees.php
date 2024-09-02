@@ -18,7 +18,7 @@ class ListAnnees extends ListRecords
 {
     protected static string $resource = AnneeResource::class;
 
-    
+
     protected function getHeaderActions(): array
     {
         return [
@@ -32,6 +32,7 @@ class ListAnnees extends ListRecords
             ->icon("heroicon-o-calendar"),
             Action::make("annee")
             ->icon("heroicon-o-calendar")
+            ->slideOver()
             ->label("Choix année de travail")
             ->form([
                 Select::make("annee")
