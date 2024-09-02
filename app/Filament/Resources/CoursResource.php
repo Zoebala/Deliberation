@@ -29,10 +29,19 @@ class CoursResource extends Resource
     protected static ?int $navigationSort = 70;
     public static function getNavigationBadge():string
     {
-        return static::getModel()::count();
+        if(session("classe_id")==null && session("semestre_id")==null){
+
+            return static::getModel()::count();
+        }else{
+
+            return Cours::where("semestre_id",session("semestre_id")[0])
+                        ->where("classe_id",session("classe_id")[0] ?? 1)
+                        ->count();
+        }
     }
     public static function getNavigationBadgeColor():string
     {
+
         return "success";
     }
 
