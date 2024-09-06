@@ -203,9 +203,11 @@ class ListEtudiants extends ListRecords
     {
 
         $Classe=Classe::where("id",session("classe_id")[0] ?? 1)->first();
+        $LibClasse=$Classe ? $Classe->lib:"Veuillez choisir une classe";
+        $IdClasse=$Classe ? $Classe->id:"Veuillez choisir une classe";
 
             return [
-                "$Classe->lib | Code : $Classe->id"=>Tab::make()
+                "$LibClasse | Code : $IdClasse"=>Tab::make()
                 ->modifyQueryUsing(function(Builder $query)
                 {
                 $query->where("classe_id",session("classe_id")[0] ?? 1);

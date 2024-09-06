@@ -458,12 +458,13 @@ class ListCoupons extends ListRecords
         //Récupération de l'effectif pour une classe choisie
         $Effectif=Etudiant::where("classe_id",session("classe_id")[0] ?? 1)->count();
         //Récupération de l'année de l'enregistrement du coupon
-        $Annee=Annee::where("id",$Cl->annee_id)->first();
+        $Annee=Annee::where("id",$Cl->annee_id ?? 1)->first();
+        $libAnnee=$Annee? $Annee->lib:"Veuillez choisir une année";
         //Récupération de la session
         $Semestre=Semestre::where("id",session("semestre_id")[0] ?? 1)->first();
         if(session("semestre_id") != null && session("classe_id") != null){
 
-            $label="$Classe->lib | Semestre : $Semestre->lib | $Annee->lib | Effectif Etudiant : $Effectif";
+            $label="$Classe->lib | Semestre : $Semestre->lib | $libAnnee | Effectif Etudiant : $Effectif";
         }else{
             $label="";
         }

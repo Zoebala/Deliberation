@@ -173,11 +173,12 @@ class ListSections extends ListRecords
     {
 
         $Section=Section::where("id",session("section_id")[0] ?? 1)->first();
+        $libSection=$Section ? $Section->lib :"Veuillez choisir une section";
 
 
 
             return [
-                "Section Sélectionnée : $Section->lib"=>Tab::make(),
+                "Section Sélectionnée : $libSection"=>Tab::make(),
 
             ];
 

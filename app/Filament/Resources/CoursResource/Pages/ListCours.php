@@ -194,11 +194,12 @@ class ListCours extends ListRecords
 
         $Semestre=Semestre::where("id",session("semestre_id")[0] ?? 1)->first();
 
-
+        $LibSemestre=$Semestre ? $Semestre->lib:"Veuillez choisir un semestre";
         $Classe=Classe::whereId(session("classe_id")[0] ?? 1)->first();
+        $LibClasse=$Classe ? $Classe->lib:"Veuillez choisir une classe";
 
             return [
-                " $Classe->lib | $Semestre->lib"=>Tab::make()
+                " $LibClasse| $LibSemestre"=>Tab::make()
                 ->modifyQueryUsing(function(Builder $query)
                 {
                 $query->where("cours.classe_id",session("classe_id")[0] ?? 1)->where("semestre_id",session("semestre_id")[0] ?? 1);
