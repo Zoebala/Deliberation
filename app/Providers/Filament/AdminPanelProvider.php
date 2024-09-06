@@ -9,6 +9,7 @@ use Filament\PanelProvider;
 use Filament\Support\Colors\Color;
 use Filament\View\PanelsRenderHook;
 use Illuminate\Support\Facades\Blade;
+use App\Filament\Pages\CustomDashboard;
 use Filament\Http\Middleware\Authenticate;
 use App\Filament\Pages\Auth\Customregister;
 use Illuminate\Session\Middleware\StartSession;
@@ -40,7 +41,8 @@ class AdminPanelProvider extends PanelProvider
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\\Filament\\Resources')
             ->discoverPages(in: app_path('Filament/Pages'), for: 'App\\Filament\\Pages')
             ->pages([
-                Pages\Dashboard::class,
+                CustomDashboard::class,
+                // Pages\Dashboard::class,
             ])
             ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\\Filament\\Widgets')
             ->widgets([
@@ -62,7 +64,7 @@ class AdminPanelProvider extends PanelProvider
             ->renderHook(
                 PanelsRenderHook::AUTH_LOGIN_FORM_AFTER,
                 fn():string =>Blade::render("<a href='/' style='color:#fbbf24; text-align:center; font-weight:bold;'>Accueil ?</a>"),
-               
+
             )
             ->authMiddleware([
                 Authenticate::class,
