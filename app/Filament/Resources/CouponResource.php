@@ -126,7 +126,7 @@ class CouponResource extends Resource
                                      ->live()
                                      ->afterStateUpdated(function($state,$set){
                                         if($state > 10){
-                                            $set("tj",null);
+                                            $set("examenS1",null);
                                             Notification::make()
                                             ->title("La cote ne peut être au-delà de 10")
                                             ->warning()
@@ -141,7 +141,7 @@ class CouponResource extends Resource
                                      ->numeric()
                                      ->afterStateUpdated(function($state,$set){
                                         if($state > 10){
-                                            $set("tj",null);
+                                            $set("examenS2",null);
                                             Notification::make()
                                             ->title("La cote ne peut être au-delà de 10")
                                             ->warning()

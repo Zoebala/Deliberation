@@ -82,13 +82,13 @@ class ListCoupons extends ListRecords
 
                     //Récupération nombre de cours pour une classe
                     $NbCours=Cours::join("semestres","semestres.id","cours.semestre_id")
-                                    ->where("classe_id",session("classe_id"))
+                                    ->where("classe_id",session("classe_id")[0] ?? 1)
                                     ->where("annee_id",session("Annee_id")[0] ?? 1)
                                     ->count();
 
                     //Récupération nombre cours semestre pour une année
-                    $NbCoursSemestre=Cours::where("classe_id",session("classe_id"))
-                                          ->where("semestre_id",session("semestre_id")[0])
+                    $NbCoursSemestre=Cours::where("classe_id",session("classe_id")[0] ?? 1)
+                                          ->where("semestre_id",session("semestre_id")[0] ?? 1)
                                           ->count();
 
 
