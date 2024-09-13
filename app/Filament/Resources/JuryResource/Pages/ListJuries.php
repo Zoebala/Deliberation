@@ -32,7 +32,7 @@ class ListJuries extends ListRecords
             Actions\CreateAction::make()
             ->label("Ajouter un Jury")
             ->icon("heroicon-o-building-library")
-            ->hidden(fn():bool => session("Annee_id") == null),
+            ->hidden(fn():bool => session("Annee_id") == null && session("section") == null),
             Action::make("annee_choix")
             ->label("Choix Année & Section")
             ->icon("heroicon-o-calendar-days")

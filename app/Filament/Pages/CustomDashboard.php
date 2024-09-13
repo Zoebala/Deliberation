@@ -18,7 +18,12 @@ class CustomDashboard extends Dashboard
     protected function getHeaderActions():array
     {
         return [
-            Action::make("choix_annee")
+            Action::make("Accueil")
+            ->icon("heroicon-o-home")
+            ->action(function(){
+                return redirect("/");
+            }),
+            Action::make("annee_choix")
             ->icon("heroicon-o-calendar")
             // ->visible(fn():bool => session("Annee_id")==null)
             ->slideOver()

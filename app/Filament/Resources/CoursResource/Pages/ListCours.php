@@ -199,7 +199,7 @@ class ListCours extends ListRecords
         $LibClasse=$Classe ? $Classe->lib:"Veuillez choisir une classe";
 
             return [
-                " $LibClasse| $LibSemestre"=>Tab::make()
+                " $LibClasse | $LibSemestre"=>Tab::make()
                 ->modifyQueryUsing(function(Builder $query)
                 {
                 $query->where("cours.classe_id",session("classe_id")[0] ?? 1)->where("semestre_id",session("semestre_id")[0] ?? 1);

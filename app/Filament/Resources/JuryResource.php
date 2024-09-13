@@ -55,7 +55,7 @@ class JuryResource extends Resource
                 ->schema([
                     Select::make("section_id")
                     ->label("Section")
-                    ->options(SectionModel::all()->pluck("lib","id"))
+                    ->options(SectionModel::where("id",session("section_id")[0] ?? 1)->pluck("lib","id"))
                     ->preload()
                     ->live()
                     ->required()

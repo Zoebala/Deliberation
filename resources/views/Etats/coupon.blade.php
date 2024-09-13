@@ -17,7 +17,7 @@
                     ?>
                     <span class="fst-italic">
                         A suivi régulièrement pendant l'année Académique {{ $queries[0]->annee."-".($queries[0]->annee+1) }} Les cours portant sur les
-                        matières ci-dessous et obtenu les cotes suivantes à la @if(isset($queries[0]->sess)){{ $queries[0]->sess." ".$formatter->format($date1)." ". $queries[0]->annee  }}@else{{ "fin de l'année ".session("Annee")[0]."-".session("Annee")[0]+1 }}@endif :
+                        matières ci-dessous et obtenu les cotes suivantes au @if(isset($queries[0]->sess)){{ $queries[0]->sess." ".$formatter->format($date1)." ". $queries[0]->annee  }}@else{{ "fin de l'année ".session("Annee")[0]."-".session("Annee")[0]+1 }}@endif :
                     </span>
                  </p>
             </div>
