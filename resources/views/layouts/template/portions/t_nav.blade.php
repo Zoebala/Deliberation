@@ -13,7 +13,7 @@
 
       @if(Auth()->user())
           @if(Auth()->user()->hasRole('Etudiant'))
-            <li class="d-md-none" ><a class="nav-link scrollto" href="/admin/etudiants"> Mon Profil</a></li>
+            <li class="d-md-none" ><a class="nav-link scrollto" href="/admin"> Mon Profil</a></li>
           @else
             <li class="d-md-none" ><a class="nav-link scrollto" href="/admin"> Mon Profil</a></li>
 
