@@ -39,7 +39,7 @@ class StatAdminOverview extends BaseWidget
 
                     if($Etudiant){
 
-                        return Recours::where("etudiant_id",Auth()->user()->id)
+                        return Recours::where("etudiant_id",$Etudiant->id)
                                                 ->where("semestre_id",session("semestre_id")[0] ?? 1)
                                                 ->where("classe_id",session("classe_id")[0] ?? 1)
                                                 ->count();
