@@ -30,11 +30,12 @@ class RecoursResource extends Resource
     public static function getNavigationBadge():string
     {
         if(Auth()->user()->hasRole("Etudiant")){
-            $Etudiant=Etudiant::where("user_id",Auth()->user()->id)->first();
 
-            if($Etudiant){
 
-                return static::getModel()::where("etudiant_id",Auth()->user()->id)
+            //on vérifie si le user en cours à un lien avec un étudiant de la base
+            if(Etudiant::where("user_id",Auth()->user()->id)->exists()){
+                $Etudiant=Etudiant::where("user_id",Auth()->user()->id)->first();
+                return Recours::where("etudiant_id",$Etudiant->id)
                                         ->where("semestre_id",session("semestre_id")[0] ?? 1)
                                         ->where("classe_id",session("classe_id")[0] ?? 1)
                                         ->count();
@@ -70,7 +71,18 @@ class RecoursResource extends Resource
                     ->columnSpanFull(),
                     Forms\Components\Select::make('etudiant_id')
                         ->label("Etudiant")
-                        ->options(Etudiant::where("classe_id",session("classe_id")[0] ??1)->pluck("nom","id"))
+                        ->options(function(){
+                            //on vérifie si le user en cours à un lien avec un étudiant de la base
+                            if(Etudiant::where("user_id",Auth()->user()->id)->exists()){
+
+                                return Etudiant::where("user_id",Auth()->user()->id)->pluck("nom","id");
+                            }else{
+
+                                return Etudiant::where("classe_id",session("classe_id")[0] ??1)->pluck("nom","id");
+                            }
+
+
+                        })
                         ->preload()
                         ->searchable()
                         ->live()

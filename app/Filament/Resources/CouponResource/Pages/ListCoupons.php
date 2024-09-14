@@ -226,6 +226,7 @@ class ListCoupons extends ListRecords
                 Action::make("liaison_choix")
                 ->label("Liaison Utilisateur-Etudiant")
                 ->modalSubmitActionLabel("Définir")
+                ->slideOver()
                 ->visible(fn():bool =>  Auth()->user()->hasRole("Etudiant"))
                 ->hidden(fn():bool => Etudiant::where("user_id",Auth()->user()->id)->exists())
                 ->form([
@@ -341,6 +342,7 @@ class ListCoupons extends ListRecords
         return Action::make("liaison")
                 ->modalHeading("Liaison User-Etudiant")
                 ->modalSubmitActionLabel("Définir")
+                ->slideOver()
                 ->visible(fn():bool =>  $Etudiant == null)
                 ->hidden(fn():bool =>  Auth()->user()->hasRole(["Admin","Jury"]))
                 ->form([

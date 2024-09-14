@@ -22,7 +22,8 @@
 
             <div>
                 <ol>
-                    <li class="h3"><h3>On Réussi avec la plus grande distinction</h3>
+                    <li class="h3"
+                    ><h3>On Réussi avec la plus grande distinction</h3>
                         <ul>
 
                                 @if (count($PGDS)>0)
@@ -217,7 +218,7 @@
                                                             <td>{{ $item->postnom }}</td>
                                                             <td>{{ $item->prenom }}</td>
                                                             <td>{{ $item->genre }}</td>
-                                                            <td>{{ ($item->coteObtenue*100)/$item->total }}</td>
+                                                            <td>{{ number_format(($item->coteObtenue*100)/$item->total,2,",",",") }}</td>
                                                         </tr>
                                                     @endif
                                                 @endforeach
@@ -298,7 +299,7 @@
                                                             <td>{{ $item->postnom }}</td>
                                                             <td>{{ $item->prenom }}</td>
                                                             <td>{{ $item->genre }}</td>
-                                                            <td>{{ ($item->coteObtenue*100)/$item->total }}</td>
+                                                            <td>{{ number_format(($item->coteObtenue*100)/$item->total,2,",",",") }}</td>
                                                         </tr>
                                                     @endif
                                                 @endforeach

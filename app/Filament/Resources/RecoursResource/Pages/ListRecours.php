@@ -40,8 +40,9 @@ class ListRecours extends ListRecords
             ->hidden(fn():bool => session("classe_id") == null),
             Action::make("classe_choix")
                  ->icon("heroicon-o-building-office")
-                 ->hidden(fn():bool => Auth()->user()->hasRole("Etudiant"))
+                //  ->hidden(fn():bool => Auth()->user()->hasRole("Etudiant"))
                  ->label("Choix Classe & Semestre")
+                 ->slideOver()
                  ->modalSubmitActionLabel("Définir")
                 ->form([
                     Select::make("section_id")
@@ -108,6 +109,7 @@ class ListRecours extends ListRecords
                 ->action(function(array $data){
                     if(session('classe_id')==NULL && session('classe')==NULL){
 
+                        session()->push("section_id", $data["section_id"]);
                         session()->push("classe_id", $data["classe_id"]);
                         session()->push("classe", $data["classe"]);
                         session()->push("semestre_id", $data["semestre_id"]);
@@ -115,10 +117,12 @@ class ListRecours extends ListRecords
 
                     }else{
 
-                        session()->pull("classe_id", $data["classe_id"]);
-                        session()->pull("classe", $data["classe"]);
-                        session()->pull("semestre_id", $data["semestre_id"]);
-                        session()->pull("semestre", $data["semestre"]);
+                        session()->pull("section_id");
+                        session()->pull("classe_id");
+                        session()->pull("classe");
+                        session()->pull("semestre_id");
+                        session()->pull("semestre");
+                        session()->push("section_id", $data["section_id"]);
                         session()->push("classe_id", $data["classe_id"]);
                         session()->push("classe", $data["classe"]);
                         session()->push("semestre_id", $data["semestre_id"]);
@@ -367,10 +371,11 @@ class ListRecours extends ListRecords
 
 
         $Classe=Classe::where("id",session("classe_id")[0] ?? 1)->first();
+
         //Récupération de la session
         $Semestre=Semestre::where("id",session("semestre_id")[0] ?? 1)->first();
 
-        if(session("semestre_id") != null && session("classe_id") != null){
+        if(session("semestre_id") != null && session("classe_id") != null && session("section_id") != null){
 
             $label="$Section->lib | $libJury | $Classe->lib | Semestre: $Semestre->lib";
         }else{
